@@ -1,5 +1,5 @@
 import { useState } from "react";
-import RegistrationForm , { Variant } from "../components/RegistrationForm";
+import RegistrationForm , { Variant } from "../pages/RegistrationForm";
 
 export default function RegistrationPage() {
     const [variant, setVariant] = useState<Variant>("volunteer");
