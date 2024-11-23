@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState<string[]>([]);
     const navigate = useNavigate();
     const [error, setError] = useState('');
 
@@ -24,17 +23,15 @@ const LoginPage: React.FC = () => {
             const data = await response.json();
 
             if (response.ok) {
-                // Store the token (e.g., in localStorage)
-                localStorage.setItem('authToken', data.token);
-                setRole(data.role);
+                localStorage.setItem('jwtToken', data.token);
+                localStorage.setItem("role", data.role);
+                localStorage.setItem("username", username);
 
                 console.log(data.role);
                 console.log('Login successful. Token:', data.token);
-
-                // Redirect to another page or update UI as needed
+                
                 navigate("/");
             } else {
-                // Display error message from backend
                 setError(data.message || 'Login failed');
             }
         } catch (error) {
@@ -73,5 +70,6 @@ const LoginPage: React.FC = () => {
         </div>
     );
 };
+
 
 export default LoginPage;

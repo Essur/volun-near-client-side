@@ -1,8 +1,11 @@
 import './App.css'
-import RegistrationPage from './pages/RegistrationPage'
+import RegistrationPage from './pages/registration/RegistrationPage'
 import LoginPage from './pages/LoginPage.tsx'
 import Navbar from './components/Navbar.tsx';
-import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute.tsx'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard.tsx';
+import ProfilePage from './pages/ProfilePage.tsx';
 
 
 const App: React.FC = () => {
@@ -12,6 +15,8 @@ const App: React.FC = () => {
               <Navbar />
               <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                  <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegistrationPage />} />
               </Routes>

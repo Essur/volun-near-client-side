@@ -1,7 +1,6 @@
 // SubmitRegistration.tsx
 import React, { useState } from "react";
-import axios from "axios";
-import { Variant } from "../pages/RegistrationForm";
+import { Variant } from "../pages/registration/RegistrationForm";
 import { useNavigate } from 'react-router-dom';
 
 
@@ -32,7 +31,6 @@ const SubmitRegistration: React.FC<SubmitRegistrationProps> = ({ variant, formDa
       if (response.ok){
         console.log("Registration successful: ", response.status);
         setMessage("Registration succesfull. Redireting...");
-        // Redirection after 5 sec
         setTimeout(() => {
           navigate('/login');
         }, 5000);

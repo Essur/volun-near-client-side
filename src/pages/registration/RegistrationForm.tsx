@@ -1,6 +1,6 @@
 // RegistrationForm.tsx
 import React, { useState } from "react";
-import SubmitRegistration from "../components/SubmitRegistration";
+import SubmitRegistration from "../../components/SubmitRegistration";
 
 export type Variant = "volunteer" | "organization";
 
