@@ -9,29 +9,29 @@ import ProfilePage from './pages/ProfilePage.tsx';
 
 
 const App: React.FC = () => {
-  return (
-      <BrowserRouter>
-          <div>
-              <Navbar />
-              <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegistrationPage />} />
-              </Routes>
-          </div>
-      </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <div>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegistrationPage />} />
+                </Routes>
+            </div>
+        </BrowserRouter>
+    );
 };
 
 const Home: React.FC = () => {
-  return (
-      <div>
-          <h1>Welcome</h1>
-          <p>This is the home page.</p>
-      </div>
-  );
+    return (
+        <div>
+            <h1>Welcome</h1>
+            <p>This is the home page.</p>
+        </div>
+    );
 };
 
 export default App;

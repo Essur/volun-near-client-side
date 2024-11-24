@@ -10,7 +10,6 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
             const response = await fetch('http://localhost:8080/api/v1/login', {
                 method: 'POST',
@@ -26,7 +25,8 @@ const LoginPage: React.FC = () => {
                 localStorage.setItem('jwtToken', data.token);
                 localStorage.setItem("role", data.role);
                 localStorage.setItem("username", username);
-
+                setUsername(data.username);
+                
                 console.log(data.role);
                 console.log('Login successful. Token:', data.token);
                 
@@ -73,3 +73,7 @@ const LoginPage: React.FC = () => {
 
 
 export default LoginPage;
+function refreshPage() {
+    throw new Error('Function not implemented.');
+}
+

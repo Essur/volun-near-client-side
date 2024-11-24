@@ -1,73 +1,92 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, CSSProperties } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
-    const [isDropdownVisible, setDropdownVisible] = useState(false);
-    const username = localStorage.getItem("username");
+    const [username, setUsername] = useState<string | null>(null);
+    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
 
-    const toggleDropdown = () => {
-        setDropdownVisible(!isDropdownVisible);
-    };
+    useEffect(() => {
+        const storedUsername = localStorage.getItem("username");
+        setUsername(storedUsername);
+    }, []);
 
-    const handleSignOut = () => {
-        localStorage.clear();
-        navigate("/login");
+    const handleLogout = () => {
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("username");
+        localStorage.removeItem("role");
+        setUsername(null); 
+        setMenuOpen(false);
+        navigate("/");
     };
 
     return (
-        <div style={styles.container}>
-            <span onClick={toggleDropdown} style={styles.username}>
-                {username || "User"} ▼
-            </span>
-            {isDropdownVisible && (
-                <div style={styles.dropdown}>
-                    <button
-                        style={styles.dropdownItem}
-                        onClick={() => navigate("/profile")}
+        <div style={styles.userProfile}>
+            {username ? (
+                <div>
+                    <span
+                        style={styles.username}
+                        onClick={() => setMenuOpen(!menuOpen)}
                     >
-                        View Profile 
-                    </button>
-                    <button style={styles.dropdownItem} onClick={handleSignOut}>
-                        Sign Out
-                    </button>
+                        {username} ▼
+                    </span>
+                    {menuOpen && (
+                        <div style={styles.dropdownMenu}>
+                            <button style={styles.menuItem} onClick={() => navigate("/profile")}>
+                                View Profile
+                            </button>
+                            <button style={styles.menuItem} onClick={handleLogout}>
+                                Logout
+                            </button>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div>
+                    <Link to="/login" style={styles.link}>
+                        Sign In
+                    </Link>
+                    <Link to="/register" style={styles.link}>
+                        Sign Up
+                    </Link>
                 </div>
             )}
         </div>
     );
 };
 
-const styles = {
-    container: {
-        position: "relative" as const,
-        display: "inline-block",
-        cursor: "pointer",
+const styles : { [key: string]: CSSProperties } = {
+    userProfile: {
+        position: "relative",
+        color: "white",
     },
     username: {
-        color: "white",
-        padding: "5px 10px",
-        backgroundColor: "#282c34",
-        borderRadius: "5px",
-        fontSize: "16px",
+        cursor: "pointer"
     },
-    dropdown: {
-        position: "absolute" as const,
+    dropdownMenu: {
+        position: "absolute" as "absolute",
         top: "100%",
         right: 0,
-        backgroundColor: "#FFF",
-        border: "1px solid #ddd",
+        backgroundColor: "#333",
+        color: "white",
+        padding: "10px",
         borderRadius: "5px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-        zIndex: 1000,
-        minWidth: "150px",
+        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
     },
-    dropdownItem: {
-        padding: "10px 15px",
-        textAlign: "left" as const,
-        backgroundColor: "#000",
+    menuItem: {
+        display: "block",
+        background: "transparent",
+        color: "white",
         border: "none",
-        width: "100%",
+        padding: "5px 0",
+        textAlign: "left" as "left",
         cursor: "pointer",
+        width: "100%",
+    },
+    link: {
+        margin: "0 10px",
+        color: "white",
+        textDecoration: "none",
     },
 };
 

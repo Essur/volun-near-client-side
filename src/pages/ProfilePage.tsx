@@ -4,31 +4,37 @@ import GetProfileRequest from "../components/userActions/GetProfileRequest";
 const ProfilePage: React.FC = () => {
     const [profileData, setProfileData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
-    const [showMenu, setShowMenu] = useState(false); 
+    const [showMenu, setShowMenu] = useState(false);
     const [newPreference, setNewPreference] = useState<string>("");
-
 
 
     const handleAddPreference = async () => {
         const role = localStorage.getItem("role");
-        if (newPreference.trim() && profileData && role?.substring(6, role.length - 1).toLowerCase() === "volunteer") {
+        if (
+            newPreference.trim() &&
+            profileData &&
+            role?.substring(6, role.length - 1).toLowerCase() === "volunteer"
+        ) {
             try {
-                const response = await fetch("http://localhost:8080/api/v1/volunteer/set_preferences", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                    },
-                    body: JSON.stringify({ preferences: [...profileData.preferences, newPreference] }),
-                });
-
+                const response = await fetch(
+                    "http://localhost:8080/api/v1/volunteer/set_preferences",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                        },
+                        body: JSON.stringify({ preferences: [newPreference] }), 
+                    }
+                );
+    
                 if (response.ok) {
                     setProfileData((prev: any) => ({
                         ...prev,
-                        preferences: [...prev.preferences, newPreference],
+                        preferences: [...prev.preferences, newPreference], 
                     }));
                     setNewPreference("");
-                    console.log(response.body);
+                    console.log("Preference added successfully.");
                 } else {
                     console.error("Failed to add preference.");
                 }
@@ -37,22 +43,26 @@ const ProfilePage: React.FC = () => {
             }
         }
     };
+    
 
-    const handleRemovePreference = async (preference: string) => {
+    const handleRemovePreference = async (preferenceId: number) => {
         try {
-            const response = await fetch("http://localhost:8080/api/v1/volunteer/preferences", {
+            const response = await fetch("http://localhost:8080/api/v1/volunteer/delete_preference", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                 },
-                body: JSON.stringify({ preference }),
+                
+                body: JSON.stringify( { preferenceId: preferenceId } )
             });
-
+            
             if (response.ok) {
                 setProfileData((prev: any) => ({
                     ...prev,
-                    preferences: prev.preferences.filter((pref: string) => pref !== preference),
+                    preferences: prev.preferences.filter(
+                        (pref: { preferenceId: number }) => pref.preferenceId !== preferenceId
+                    ),
                 }));
             } else {
                 console.error("Failed to remove preference.");
@@ -61,24 +71,22 @@ const ProfilePage: React.FC = () => {
             console.error("Error removing preference:", err);
         }
     };
-
+    
     return (
         <div style={styles.container}>
             <h2>My Profile</h2>
 
-            {/* Fetch profile data */}
             <GetProfileRequest
                 onData={(data) => {
                     setProfileData(data);
-                    setError(null); // Clear error if data is successfully fetched
+                    setError(null); 
                 }}
                 onError={(err) => {
                     setError(err);
-                    setProfileData(null); // Clear data if there's an error
+                    setProfileData(null);
                 }}
             />
 
-            {/* Render profile data or error */}
             {error ? (
                 <div style={styles.error}>{error}</div>
             ) : profileData ? (
@@ -92,12 +100,12 @@ const ProfilePage: React.FC = () => {
                         <li>
                             <strong>Preferences:</strong>
                             <ul>
-                                {profileData.preferences.map((pref: string, index: number) => (
-                                    <li key={index}>
-                                        {pref}
+                                {profileData.preferences.map((pref: { preferenceId: number; preferenceName: string }) => (
+                                    <li key={pref.preferenceId}>
+                                        {pref.preferenceName}
                                         <button
                                             style={styles.removeButton}
-                                            onClick={() => handleRemovePreference(pref)}
+                                            onClick={() => handleRemovePreference(pref.preferenceId)}
                                         >
                                             Remove
                                         </button>
@@ -119,7 +127,6 @@ const ProfilePage: React.FC = () => {
                 <div>Loading profile data...</div>
             )}
 
-            {/* Preferences management menu */}
             {showMenu && (
                 <div style={styles.menu}>
                     <h4>Add preference</h4>
