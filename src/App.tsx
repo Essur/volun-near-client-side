@@ -5,8 +5,8 @@ import PrivateRoute from './components/PrivateRoute.tsx';
 import Dashboard from './pages/Dashboard.tsx';
 import LoginPage from './pages/LoginPage.tsx';
 import RegistrationPage from './pages/registration/RegistrationPage';
-import VolunteerProfilePage from './pages/VolunteerProfilePage.tsx';
-import OrganizationProfilePage from './pages/OrganizationProfilePage.tsx';
+import VolunteerProfilePage from './pages/profile/VolunteerProfilePage.tsx';
+import OrganizationProfilePage from './pages/profile/OrganizationProfilePage.tsx';
 
 const App: React.FC = () => {
     return (

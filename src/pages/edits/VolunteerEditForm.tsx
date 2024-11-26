@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface VolunteerEditFormProps {
     profileData: any;
@@ -6,7 +7,8 @@ interface VolunteerEditFormProps {
     onUpdate: (updatedProfile: any) => void;
 }
 
-const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onClose, onUpdate }) => {
+const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onClose }) => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: profileData.firstName,
         lastName: profileData.lastName,
@@ -35,7 +37,7 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
 
             if (response.ok) {
                 alert("Profile updated successfully!");
-                
+                navigate(0)
                 onClose(); 
             } else {
                 alert("Failed to update profile.");
@@ -46,7 +48,7 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={styles.modalContent}>
             <h2>Edit Volunteer Profile</h2>
             <label>
                 First Name:
@@ -55,6 +57,7 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    style={styles.input}
                 />
             </label>
             <br />
@@ -65,6 +68,7 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
+                    style={styles.input}
                 />
             </label>
             <br />
@@ -75,10 +79,13 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    style={styles.input}
                 />
             </label>
             <br />
-            <button type="submit">Save Changes</button>
+            <button type="submit" style={styles.button}>
+                Save Changes
+            </button>
         </form>
     );
 };
@@ -90,15 +97,15 @@ const styles = {
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+        backgroundColor: "rgba(0, 0, 0, 0.5)", 
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         zIndex: 1000,
     },
     modalContent: {
-        backgroundColor: "#ffffff", // White background for the form
-        color: "#000000", // Black text color
+        backgroundColor: "#ffffff",
+        color: "#000000",
         padding: "20px",
         borderRadius: "8px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",

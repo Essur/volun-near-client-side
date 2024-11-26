@@ -1,12 +1,16 @@
-import React, { CSSProperties, useState } from "react";
-import { useProfile } from "../components/context/ProfileContext";
-import VolunteerEditForm from "./VolunteerEditForm";
+import React, { CSSProperties, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../components/context/AuthContext";
+import { useProfile } from "../../components/context/ProfileContext";
+import VolunteerEditForm from "../edits/VolunteerEditForm";
 
 const VolunteerProfilePage: React.FC = () => {
-    const { profileData, error, fetchProfile, updateProfile } = useProfile();
+    const { profileData, error, updateProfile } = useProfile();
     const [showMenu, setShowMenu] = useState(false);
     const [newPreference, setNewPreference] = useState<string>("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const auth = useContext(AuthContext);
+    const navigate = useNavigate();
 
     
     const handleAddPreference = async () => {
@@ -74,6 +78,32 @@ const VolunteerProfilePage: React.FC = () => {
         }
     };
 
+    async function removeProfile(): Promise<void> {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/api/v1/volunteer/delete_profile",
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                    }
+                }
+            );
+            
+            if (response.ok) {
+                setTimeout(() => {
+                    auth?.logout();
+                    navigate("/");
+                }, 2000);
+            } else {
+                console.error("Failed to remove preference.");
+            }
+        } catch (err) {
+            console.error("Error removing preference:", err);
+        }
+    }
+
     return (
         <div style={styles.container}>
             {error ? (
@@ -89,12 +119,12 @@ const VolunteerProfilePage: React.FC = () => {
                         <li>
                             <strong>Preferences:</strong>
                             <ul>
-                                {profileData.preferences.map((pref: { preferenceId: number; preferenceName: string }) => (
-                                    <li key={pref.preferenceId}>
-                                        {pref.preferenceName}
+                                {profileData.preferences.map((preference: { preferenceId: number; preferenceName: string }) => (
+                                    <li key={preference.preferenceId}>
+                                        {preference.preferenceName}
                                         <button
                                             style={styles.removeButton}
-                                            onClick={() => handleRemovePreference(pref.preferenceId)}
+                                            onClick={() => handleRemovePreference(preference.preferenceId)}
                                         >
                                             Remove
                                         </button>
@@ -108,6 +138,9 @@ const VolunteerProfilePage: React.FC = () => {
                     </button>
                     <button style={styles.editButton} onClick={() => setIsEditModalOpen(true)}>
                         Edit Profile
+                    </button>
+                    <button  onClick={() => removeProfile()}>
+                        Delete Profile
                     </button>
                 </div>
             ) : (
