@@ -33,7 +33,7 @@ const SubmitRegistration: React.FC<SubmitRegistrationProps> = ({ variant, formDa
         setMessage("Registration succesfull. Redireting...");
         setTimeout(() => {
           navigate('/login');
-        }, 5000);
+        }, 2000);
       } else if (response.status === 409) {
         console.log("Registration failed: ", response.status);
         setMessage("User already exists!");

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import GetProfileRequest from "../components/userActions/GetProfileRequest";
+import React, { CSSProperties, useState } from "react";
+import { useProfile } from "../components/context/ProfileContext";
+import VolunteerEditForm from "./VolunteerEditForm";
 
-const ProfilePage: React.FC = () => {
-    const [profileData, setProfileData] = useState<any>(null);
-    const [error, setError] = useState<string | null>(null);
+const VolunteerProfilePage: React.FC = () => {
+    const { profileData, error, fetchProfile, updateProfile } = useProfile();
     const [showMenu, setShowMenu] = useState(false);
     const [newPreference, setNewPreference] = useState<string>("");
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-
+    
     const handleAddPreference = async () => {
         const role = localStorage.getItem("role");
         if (
@@ -24,15 +25,15 @@ const ProfilePage: React.FC = () => {
                             "Content-Type": "application/json",
                             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
                         },
-                        body: JSON.stringify({ preferences: [newPreference] }), 
+                        body: JSON.stringify({ preferences: [newPreference] }),
                     }
                 );
-    
+
                 if (response.ok) {
-                    setProfileData((prev: any) => ({
-                        ...prev,
-                        preferences: [...prev.preferences, newPreference], 
-                    }));
+                    updateProfile({
+                        ...profileData,
+                        preferences: [...profileData.preferences, newPreference],
+                    });
                     setNewPreference("");
                     console.log("Preference added successfully.");
                 } else {
@@ -43,27 +44,28 @@ const ProfilePage: React.FC = () => {
             }
         }
     };
-    
 
     const handleRemovePreference = async (preferenceId: number) => {
         try {
-            const response = await fetch("http://localhost:8080/api/v1/volunteer/delete_preference", {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                },
-                
-                body: JSON.stringify( { preferenceId: preferenceId } )
-            });
-            
+            const response = await fetch(
+                "http://localhost:8080/api/v1/volunteer/delete_preference",
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                    },
+                    body: JSON.stringify({ preferenceId }),
+                }
+            );
+
             if (response.ok) {
-                setProfileData((prev: any) => ({
-                    ...prev,
-                    preferences: prev.preferences.filter(
+                updateProfile({
+                    ...profileData,
+                    preferences: profileData.preferences.filter(
                         (pref: { preferenceId: number }) => pref.preferenceId !== preferenceId
                     ),
-                }));
+                });
             } else {
                 console.error("Failed to remove preference.");
             }
@@ -71,22 +73,9 @@ const ProfilePage: React.FC = () => {
             console.error("Error removing preference:", err);
         }
     };
-    
+
     return (
         <div style={styles.container}>
-            <h2>My Profile</h2>
-
-            <GetProfileRequest
-                onData={(data) => {
-                    setProfileData(data);
-                    setError(null); 
-                }}
-                onError={(err) => {
-                    setError(err);
-                    setProfileData(null);
-                }}
-            />
-
             {error ? (
                 <div style={styles.error}>{error}</div>
             ) : profileData ? (
@@ -114,13 +103,11 @@ const ProfilePage: React.FC = () => {
                             </ul>
                         </li>
                     </ul>
-                    <button
-                        style={styles.manageButton}
-                        onClick={() => {
-                            setShowMenu(!showMenu);
-                        }}
-                    >
+                    <button style={styles.manageButton} onClick={() => setShowMenu(!showMenu)}>
                         Manage Preferences
+                    </button>
+                    <button style={styles.editButton} onClick={() => setIsEditModalOpen(true)}>
+                        Edit Profile
                     </button>
                 </div>
             ) : (
@@ -142,11 +129,29 @@ const ProfilePage: React.FC = () => {
                     </button>
                 </div>
             )}
+
+            {isEditModalOpen && (
+                <div style={styles.modal}>
+                    <div style={styles.modalContent}>
+                        <button
+                            style={styles.closeButton}
+                            onClick={() => setIsEditModalOpen(false)}
+                        >
+                            ×
+                        </button>
+                        <VolunteerEditForm
+                            profileData={profileData}
+                            onClose={() => setIsEditModalOpen(false)}
+                            onUpdate={(updatedProfile) => updateProfile(updatedProfile)}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
-const styles = {
+const styles : { [key: string]: CSSProperties } ={
     container: {
         padding: "20px",
         fontFamily: "Arial, sans-serif",
@@ -181,6 +186,15 @@ const styles = {
         padding: "10px",
         borderRadius: "5px",
     },
+    editButton: {
+        marginTop: "10px",
+        backgroundColor: "#28a745",
+        color: "white",
+        border: "none",
+        cursor: "pointer",
+        padding: "10px",
+        borderRadius: "5px",
+    },
     menu: {
         marginTop: "20px",
         padding: "15px",
@@ -201,6 +215,33 @@ const styles = {
         padding: "5px 10px",
         borderRadius: "3px",
     },
+    modal: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    modalContent: {
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "8px",
+        width: "400px",
+        position: "relative",
+    },
+    closeButton: {
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        background: "none",
+        border: "none",
+        fontSize: "20px",
+        cursor: "pointer",
+    },
 };
 
-export default ProfilePage;
+export default VolunteerProfilePage;

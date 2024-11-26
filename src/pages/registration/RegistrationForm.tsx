@@ -57,8 +57,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
           <>
             <input
               type="text"
-              name="organizationName"
-              placeholder="Organization name"
+              name="nameOfOrganization"
+              placeholder="Name of organization"
               onChange={handleInputChange}
             />
             <input
