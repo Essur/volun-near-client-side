@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Variant } from "../pages/registration/RegistrationForm";
 import { useNavigate } from 'react-router-dom';
+import { SimpleButton } from "../styles/StyledComponents";
 
 
 interface SubmitRegistrationProps {
@@ -48,9 +49,9 @@ const SubmitRegistration: React.FC<SubmitRegistrationProps> = ({ variant, formDa
 
   return (
     <>
-      <button onClick={handleSubmit}>
+      <SimpleButton onClick={handleSubmit}>
         Submit
-      </button>
+      </SimpleButton>
       {message && <p>{message}</p>}
     </>
   );

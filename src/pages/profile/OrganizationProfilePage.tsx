@@ -1,15 +1,18 @@
-import React, { CSSProperties, useContext, useState } from "react";
-import { useProfile } from "../../components/context/ProfileContext";
-import { AuthContext } from "../../components/context/AuthContext";
+import React, { useContext, useState } from "react";
+import { useProfile } from "../../contexts/ProfileContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import OrganizationEditForm from "../edits/OrganizationEditForm";
+import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag} from "../../styles/StyledComponents";
+import { Activity } from "../../components/types";
+import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
 
 const OrganizationProfilePage: React.FC = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const { profileData, error } = useProfile();
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
-    
+
     async function removeProfile(): Promise<void> {
         try {
             const response = await fetch(
@@ -22,8 +25,9 @@ const OrganizationProfilePage: React.FC = () => {
                     }
                 }
             );
-            
+
             if (response.ok) {
+                console.log("Profile was successfully deleted!")
                 setTimeout(() => {
                     auth?.logout();
                     navigate("/");
@@ -35,12 +39,12 @@ const OrganizationProfilePage: React.FC = () => {
             console.error("Error removing preference:", err);
         }
     }
+
     const handleEdit = () => {
         setIsEditModalOpen(true);
     };
 
     const handleUpdate = (updatedProfile: any) => {
-        // Optionally handle updates to the profile data if required.
         console.log("Updated Profile:", updatedProfile);
     };
 
@@ -48,153 +52,72 @@ const OrganizationProfilePage: React.FC = () => {
         setIsEditModalOpen(false);
     };
 
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    };
+
     return (
-        <div style={styles.container}>
-            <h1>Organization Profile</h1>
-
+        <>
+            <SubTitle>Organization profile</SubTitle>
             {error ? (
-                <div style={styles.error}>{error}</div>
+                <Error>{error}</Error>
             ) : profileData ? (
-                <div>
-                    <div style={styles.profileSection}>
-                        <h3>Organization Details</h3>
-                        <ul>
-                            <li>
-                                <strong>Name:</strong>{" "}
-                                {profileData.organizationResponseDTO.nameOfOrganization}
-                            </li>
-                            <li>
-                                <strong>Country:</strong>{" "}
-                                {profileData.organizationResponseDTO.country}
-                            </li>
-                            <li>
-                                <strong>City:</strong>{" "}
-                                {profileData.organizationResponseDTO.city}
-                            </li>
-                            <li>
-                                <strong>Address:</strong>{" "}
-                                {profileData.organizationResponseDTO.address}
-                            </li>
-                            <li>
-                                <strong>Email:</strong>{" "}
-                                {profileData.organizationResponseDTO.email}
-                            </li>
-                        </ul>
-                    </div>
+                <>
+                    <Details>
+                        <StyledText><Strong>{profileData.organizationResponseDTO.nameOfOrganization}</Strong></StyledText>
+                        <StyledText><Strong>Country:</Strong> {profileData.organizationResponseDTO.country}</StyledText>
+                        <StyledText><Strong>City:</Strong> {profileData.organizationResponseDTO.city}</StyledText>
+                        <StyledText><Strong>Address:</Strong> {profileData.organizationResponseDTO.address}</StyledText>
+                        <StyledText><Strong>Email:</Strong> {profileData.organizationResponseDTO.email}</StyledText>
+                    </Details>
 
-                    <div style={styles.activitiesSection}>
-                        <h3>Activities</h3>
-                        {profileData.activities.length > 0 ? (
-                            <ul>
-                                {profileData.activities.map(
-                                    (activity: {
-                                        id: number;
-                                        title: string;
-                                        description: string;
-                                        kindOfActivity: string;
-                                        city: string;
-                                        country: string;
-                                        dateOfPlace: string;
-                                    }) => (
-                                        <li key={activity.id} style={styles.activityItem}>
-                                            <h4>{activity.title}</h4>
-                                            <p>
-                                                <strong>Description:</strong>{" "}
-                                                {activity.description}
-                                            </p>
-                                            <p>
-                                                <strong>Type:</strong>{" "}
-                                                {activity.kindOfActivity}
-                                            </p>
-                                            <p>
-                                                <strong>Location:</strong>{" "}
-                                                {activity.city}, {activity.country}
-                                            </p>
-                                            <p>
-                                                <strong>Date:</strong>{" "}
-                                                {new Date(activity.dateOfPlace).toLocaleDateString()}
-                                            </p>
-                                        </li>
-                                    )
-                                )}
-                            </ul>
-                        ) : (
-                            <p>No activities available.</p>
-                        )}
-                    </div>
-
-                    <button style={styles.button} onClick={handleEdit}>
+                    {profileData.activities.length > 0 && (
+                        <>
+                            <SubTitle>Activities</SubTitle>
+                            <StyledList>
+                                {profileData.activities.map((activity: Activity) => (
+                                    <StyledListItem key={activity.id}>
+                                        <StyledText><Strong>{activity.title}</Strong></StyledText>
+                                        <StyledText><Strong>Location:</Strong> {activity.city}, {activity.country}</StyledText>
+                                        <StyledText><Strong>Date:</Strong> {formatDate(activity.dateOfPlace)}</StyledText>
+                                        <StyledText>{activity.description}</StyledText>
+                                        <Tag>{activity.kindOfActivity}</Tag>
+                                    </StyledListItem>
+                                ))}
+                            </StyledList>
+                        </>
+                    )}
+                    <SimpleButton onClick={handleEdit}>
                         Edit Profile
-                    </button>
-                    <button style={styles.button} onClick={removeProfile}>
+                    </SimpleButton>
+                    <SimpleButton onClick={removeProfile}>
                         Delete Profile
-                    </button>
-                </div>
+                    </SimpleButton>
+                </>
             ) : (
-                <div>Loading profile data...</div>
+                <>Loading profile data...</>
             )}
 
             {isEditModalOpen && (
-                <div style={styles.modal}>
-                    <OrganizationEditForm
-                        profileData={profileData}
-                        onClose={closeModal}
-                        onUpdate={handleUpdate}
-                    />
-                </div>
+                <EditModalContainer>
+                    <ModalContent>
+                        <OrganizationEditForm
+                            profileData={profileData}
+                            onClose={closeModal}
+                            onUpdate={handleUpdate}
+                        />
+                    </ModalContent>
+                </EditModalContainer>
             )}
-        </div>
+
+        </>
     );
 };
 
-const styles : { [key: string]: CSSProperties } = {
-    container: {
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-    },
-    error: {
-        color: "red",
-        fontWeight: "bold",
-    },
-    profileSection: {
-        marginBottom: "20px",
-        padding: "15px",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
-    },
-    activitiesSection: {
-        padding: "15px",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
-    },
-    activityItem: {
-        marginBottom: "10px",
-        padding: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
-        backgroundColor: "#f9f9f9",
-    },
-    button: {
-        padding: "10px 15px",
-        margin: "10px 5px",
-        backgroundColor: "#007bff",
-        color: "white",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-    },
-    modal: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-    },
-};
 
 export default OrganizationProfilePage;

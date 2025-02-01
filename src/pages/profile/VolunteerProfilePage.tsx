@@ -1,8 +1,10 @@
 import React, { CSSProperties, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../components/context/AuthContext";
-import { useProfile } from "../../components/context/ProfileContext";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useProfile } from "../../contexts/ProfileContext";
 import VolunteerEditForm from "../edits/VolunteerEditForm";
+import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
+import { Input, SimpleButton, SubTitle, Error, Details, StyledText, Strong, StyledList, StyledListItem, PreferenceListItem, PreferenceList } from "../../styles/StyledComponents";
 
 const VolunteerProfilePage: React.FC = () => {
     const { profileData, error, updateProfile } = useProfile();
@@ -12,7 +14,6 @@ const VolunteerProfilePage: React.FC = () => {
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
 
-    
     const handleAddPreference = async () => {
         const role = localStorage.getItem("role");
         if (
@@ -90,8 +91,9 @@ const VolunteerProfilePage: React.FC = () => {
                     }
                 }
             );
-            
+
             if (response.ok) {
+                console.log("Profile was successfully deleted!")
                 setTimeout(() => {
                     auth?.logout();
                     navigate("/");
@@ -105,176 +107,79 @@ const VolunteerProfilePage: React.FC = () => {
     }
 
     return (
-        <div style={styles.container}>
+        <>
+            <SubTitle>Volunteer profile</SubTitle>
             {error ? (
-                <div style={styles.error}>{error}</div>
+                <Error>{error}</Error>
             ) : profileData ? (
-                <div style={styles.profile}>
-                    <h3>Profile Details</h3>
-                    <ul style={styles.list}>
-                        <li><strong>Email:</strong> {profileData.email}</li>
-                        <li><strong>Username:</strong> {profileData.username}</li>
-                        <li><strong>First Name:</strong> {profileData.firstName}</li>
-                        <li><strong>Last Name:</strong> {profileData.lastName}</li>
-                        <li>
-                            <strong>Preferences:</strong>
-                            <ul>
-                                {profileData.preferences.map((preference: { preferenceId: number; preferenceName: string }) => (
-                                    <li key={preference.preferenceId}>
-                                        {preference.preferenceName}
-                                        <button
-                                            style={styles.removeButton}
-                                            onClick={() => handleRemovePreference(preference.preferenceId)}
-                                        >
-                                            Remove
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                    </ul>
-                    <button style={styles.manageButton} onClick={() => setShowMenu(!showMenu)}>
+                <>
+                    <Details>
+                        <StyledText><Strong>Email:</Strong> {profileData.email}</StyledText>
+                        <StyledText><Strong>Username:</Strong> {profileData.username}</StyledText>
+                        <StyledText><Strong>First Name:</Strong> {profileData.firstName}</StyledText>
+                        <StyledText><Strong>Last Name:</Strong> {profileData.lastName}</StyledText>
+                        <StyledText><Strong>Preferences:</Strong></StyledText>
+                        <PreferenceList>
+                            {profileData.preferences.map((preference: { preferenceId: number; preferenceName: string }) => (
+                                <PreferenceListItem key={preference.preferenceId}>
+                                    {preference.preferenceName}
+                                    <SimpleButton
+                                        onClick={() => handleRemovePreference(preference.preferenceId)}
+                                    >
+                                        Remove
+                                    </SimpleButton>
+                                </PreferenceListItem>
+                            ))}
+                        </PreferenceList>
+                    <SimpleButton onClick={() => setShowMenu(!showMenu)}>
                         Manage Preferences
-                    </button>
-                    <button style={styles.editButton} onClick={() => setIsEditModalOpen(true)}>
+                    </SimpleButton>
+                    <SimpleButton onClick={() => setIsEditModalOpen(true)}>
                         Edit Profile
-                    </button>
-                    <button  onClick={() => removeProfile()}>
+                    </SimpleButton>
+                    <SimpleButton onClick={() => removeProfile()}>
                         Delete Profile
-                    </button>
-                </div>
+                    </SimpleButton>
+                    </Details>
+
+                </>
             ) : (
-                <div>Loading profile data...</div>
+                <>Loading profile data...</>
             )}
 
             {showMenu && (
-                <div style={styles.menu}>
-                    <h4>Add preference</h4>
-                    <input
-                        type="text"
-                        placeholder="Add a preference"
-                        value={newPreference}
-                        onChange={(e) => setNewPreference(e.target.value)}
-                        style={styles.input}
-                    />
-                    <button style={styles.addButton} onClick={handleAddPreference}>
-                        Add
-                    </button>
-                </div>
+                <EditModalContainer>
+                    <ModalContent>
+                        <SubTitle>Add preference</SubTitle>
+                        <Input
+                            type="text"
+                            placeholder="Add a preference"
+                            value={newPreference}
+                            onChange={(e) => setNewPreference(e.target.value)}
+                        />
+                        <SimpleButton onClick={handleAddPreference}>
+                            Add
+                        </SimpleButton>
+                        <SimpleButton>
+                            Close
+                        </SimpleButton>
+                    </ModalContent>
+                </EditModalContainer>
             )}
 
             {isEditModalOpen && (
-                <div style={styles.modal}>
-                    <div style={styles.modalContent}>
-                        <button
-                            style={styles.closeButton}
-                            onClick={() => setIsEditModalOpen(false)}
-                        >
-                            ×
-                        </button>
+                <EditModalContainer>
+                    <ModalContent>
                         <VolunteerEditForm
                             profileData={profileData}
                             onClose={() => setIsEditModalOpen(false)}
                             onUpdate={(updatedProfile) => updateProfile(updatedProfile)}
                         />
-                    </div>
-                </div>
+                    </ModalContent>
+                </EditModalContainer>
             )}
-        </div>
+        </>
     );
-};
-
-const styles : { [key: string]: CSSProperties } ={
-    container: {
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-    },
-    error: {
-        color: "red",
-        fontWeight: "bold",
-    },
-    profile: {
-        padding: "15px",
-        borderRadius: "5px",
-    },
-    list: {
-        listStyleType: "none",
-        padding: 0,
-    },
-    removeButton: {
-        marginLeft: "10px",
-        backgroundColor: "red",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-        padding: "5px",
-        borderRadius: "3px",
-    },
-    manageButton: {
-        marginTop: "10px",
-        backgroundColor: "#007bff",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-        padding: "10px",
-        borderRadius: "5px",
-    },
-    editButton: {
-        marginTop: "10px",
-        backgroundColor: "#28a745",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-        padding: "10px",
-        borderRadius: "5px",
-    },
-    menu: {
-        marginTop: "20px",
-        padding: "15px",
-        borderRadius: "5px",
-        border: "1px solid #ccc",
-    },
-    input: {
-        marginRight: "10px",
-        padding: "5px",
-        borderRadius: "3px",
-        border: "1px solid #ccc",
-    },
-    addButton: {
-        backgroundColor: "green",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-        padding: "5px 10px",
-        borderRadius: "3px",
-    },
-    modal: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    modalContent: {
-        backgroundColor: "white",
-        padding: "20px",
-        borderRadius: "8px",
-        width: "400px",
-        position: "relative",
-    },
-    closeButton: {
-        position: "absolute",
-        top: "10px",
-        right: "10px",
-        background: "none",
-        border: "none",
-        fontSize: "20px",
-        cursor: "pointer",
-    },
 };
 
 export default VolunteerProfilePage;

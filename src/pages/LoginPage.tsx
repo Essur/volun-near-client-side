@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from "../components/context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { FormContainer, Input, SubTitle, SimpleButton, Error } from "../styles/StyledComponents";
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState("");
@@ -38,57 +39,25 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
+        <FormContainer onSubmit={handleSubmit}>
+            <SubTitle>Login</SubTitle>
+            <Input
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
-            <input
+            <Input
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
             
-            <button type="submit">Login</button>
-            {error && <div style={style.error}>{error}</div>}
-        </form>
+            <SimpleButton type="submit"> Login </SimpleButton>
+            {error && <Error>{error}</Error>}
+        </FormContainer>
     );
-};
-
-const style = {
-    container: {
-        width: "300px",
-        margin: "0 auto",
-        fontFamily: "Arial, sans-serif",
-    },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-    },
-    input: {
-        marginBottom: "10px",
-        padding: "10px",
-        fontSize: "16px",
-        borderRadius: "4px",
-        border: "1px solid #ccc",
-    },
-    button: {
-        padding: "10px",
-        fontSize: "16px",
-        backgroundColor: "#007bff",
-        color: "white",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-    },
-    error: {
-        marginTop: "10px",
-        color: "red",
-        fontWeight: "bold",
-    },
 };
 
 export default LoginPage;

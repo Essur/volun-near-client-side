@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FormContainer, Input, Label, SimpleButton, SubTitle } from "../../styles/StyledComponents";
 
 interface OrganizationEditFormProps {
     profileData: any; 
@@ -41,7 +42,6 @@ const OrganizationEditForm: React.FC<OrganizationEditFormProps> = ({ profileData
             );
 
             if (response.ok) {
-                alert("Organization profile updated successfully!");
                 navigate(0);
                 onClose();
             } else {
@@ -53,123 +53,61 @@ const OrganizationEditForm: React.FC<OrganizationEditFormProps> = ({ profileData
     };
 
     return (
-        <form onSubmit={handleSubmit} style={styles.modalContent}>
-            <h2>Edit Organization Profile</h2>
-            <label>
+        <FormContainer onSubmit={handleSubmit}>
+            <SubTitle>Edit Organization Profile</SubTitle>
+            <Label>
                 Organization Name:
-                <input
+                <Input
                     type="text"
                     name="nameOfOrganization"
                     value={formData.nameOfOrganization}
                     onChange={handleChange}
-                    style={styles.input}
                 />
-            </label>
-            <br />
-            <label>
+            </Label>
+            <Label>
                 Email:
-                <input
+                <Input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    style={styles.input}
                 />
-            </label>
-            <br />
-            <label>
+            </Label>
+            <Label>
                 Country:
-                <input
+                <Input
                     type="text"
                     name="country"
                     value={formData.country}
                     onChange={handleChange}
-                    style={styles.input}
                 />
-            </label>
-            <br />
-            <label>
+            </Label>
+            <Label>
                 City:
-                <input
+                <Input
                     type="text"
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    style={styles.input}
                 />
-            </label>
-            <br />
-            <label>
+            </Label>
+            <Label>
                 Address:
-                <input
+                <Input
                     type="text"
                     name="address"
                     value={formData.address}
                     onChange={handleChange}
-                    style={styles.input}
                 />
-            </label>
-            <br />
-            <button type="submit" style={styles.button}>
+            </Label>
+            <SimpleButton type="submit">
                 Save Changes
-            </button>
-        </form>
+            </SimpleButton>
+            <SimpleButton onClick={onClose}>
+                Close
+            </SimpleButton>
+        </FormContainer>
     );
-};
-
-const styles = {
-    modal: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-    },
-    modalContent: {
-        backgroundColor: "#ffffff",
-        color: "#000000",
-        padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-        width: "400px",
-        maxWidth: "90%",
-    },
-    closeButton: {
-        backgroundColor: "red",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-        padding: "8px 12px",
-        borderRadius: "5px",
-        fontWeight: "bold",
-        float: "right",
-    },
-    input: {
-        width: "100%",
-        padding: "10px",
-        margin: "10px 0",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        fontSize: "16px",
-    },
-    button: {
-        width: "100%",
-        padding: "10px",
-        backgroundColor: "#007bff",
-        color: "white",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-        fontSize: "16px",
-    },
-    buttonHover: {
-        backgroundColor: "#0056b3",
-    },
 };
 
 export default OrganizationEditForm;

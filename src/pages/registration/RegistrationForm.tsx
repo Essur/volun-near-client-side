@@ -1,6 +1,7 @@
 // RegistrationForm.tsx
 import React, { useState } from "react";
-import SubmitRegistration from "../../components/SubmitRegistration";
+import SubmitRegistration from "../../services/SubmitRegistration";
+import { FormContainer, Input, SubTitle } from "../../styles/StyledComponents";
 
 export type Variant = "volunteer" | "organization";
 
@@ -17,91 +18,89 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
   };
 
   return (
-    <div>
-      <h2>{variant === "volunteer" ? "Volunteer" : "Organization"} Registration</h2>
-      <form>
+    <>
+      <SubTitle>{variant === "volunteer" ? "Volunteer" : "Organization"} registration</SubTitle>
         {variant === "volunteer" ? (
-          <>
-            <input
+          <FormContainer>
+            <Input
               type="text"
               name="firstName"
               placeholder="First name"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="text"
               name="lastName"
               placeholder="Last name"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="text"
               name="username"
               placeholder="Username"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="password"
               name="password"
               placeholder="Password"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="email"
               name="email"
               placeholder="Email"
               onChange={handleInputChange}
             />
-          </>
+          </FormContainer>
         ) : (
-          <>
-            <input
+          <FormContainer>
+            <Input
               type="text"
               name="nameOfOrganization"
               placeholder="Name of organization"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="text"
               name="country"
               placeholder="Country"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="text"
               name="city"
               placeholder="City"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="text"
               name="address"
               placeholder="Address"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="email"
               name="email"
               placeholder="Email"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="text"
               name="username"
               placeholder="Username"
               onChange={handleInputChange}
             />
-            <input
+            <Input
               type="password"
               name="password"
               placeholder="Password"
               onChange={handleInputChange}
             />
-          </>
+          </FormContainer>
         )}
-      </form>
       <SubmitRegistration variant={variant} formData={formData} />
-    </div>
+    </>
   );
 };
 

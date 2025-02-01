@@ -1,9 +1,23 @@
-import React, { CSSProperties, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import {
+    Title,
+    StyledLink,
+    Username,
+    DropdownContainer,
+    DropdownMenu,
+    MenuItem,
+    SignInLink,
+    SignUpLink,
+    ThemeButton,
+} from "../styles/StyledComponents";
+import { useTheme } from "../contexts/ThemeContext";
+import { LinksContainer, NavbarContainer } from "../styles/StyledContainers";
 
 const Navbar: React.FC = () => {
     const { isLoggedIn, username, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
     const role = localStorage.getItem("role");
     let sRole = role?.substring(6, role.length - 1).toLowerCase();
@@ -12,7 +26,7 @@ const Navbar: React.FC = () => {
     const handleLogout = () => {
         logout();
         navigate("/");
-    }
+    };
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {
@@ -28,85 +42,43 @@ const Navbar: React.FC = () => {
         };
     }, [menuOpen]);
 
-
     return (
-        <nav style={styles.navbar}>
-            <h1 style={styles.title}>VolunNear App</h1>
-            <div style={styles.links}>
+        <NavbarContainer>
+            <Title>VolunNear App</Title>
+            <LinksContainer>
+                <StyledLink to="/">Home</StyledLink>
+                <StyledLink to="/organizations">Organizations</StyledLink>
+                <StyledLink to="/about">About</StyledLink>
                 {isLoggedIn ? (
-                    <div className="dropdown-container" style={styles.dropdownContainer}>
-                        <span
-                            style={styles.username}
-                            onClick={() => setMenuOpen(!menuOpen)}
-                        >
+                    <DropdownContainer className="dropdown-container">
+                        <Username onClick={() => setMenuOpen(!menuOpen)}>
                             {username} ▼
-                        </span>
+                        </Username>
                         {menuOpen && (
-                            <div style={styles.dropdownMenu}>
-                                <button style={styles.menuItem} onClick={() => 
-                                    sRole == "volunteer" ? navigate("/volunteer-profile") : navigate("/organization-profile")}>
+                            <DropdownMenu>
+                                <MenuItem onClick={() =>
+                                    sRole === "volunteer" 
+                                        ? navigate("/volunteer-profile") 
+                                        : navigate("/organization-profile")
+                                }>
                                     View Profile
-                                </button>
-                                <button style={styles.menuItem} onClick={handleLogout}>
-                                    Logout
-                                </button>
-                            </div>
+                                </MenuItem>
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                            </DropdownMenu>
                         )}
-                    </div>
+                    </DropdownContainer>
                 ) : (
                     <>
-                        <Link to="/login" style={styles.link}>Sign In</Link>
-                        <Link to="/register" style={styles.link}>Sign Up</Link>
+                        <SignInLink to="/login">Sign In</SignInLink>
+                        <SignUpLink to="/register">Sign Up</SignUpLink>
                     </>
                 )}
-            </div>
-        </nav>
+                <ThemeButton onClick={toggleTheme}>
+                    {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+                </ThemeButton>
+            </LinksContainer>
+        </NavbarContainer>
     );
-};
-
-const styles : { [key: string]: CSSProperties } = {
-    navbar: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px 20px",
-        backgroundColor: "#282c34",
-        color: "white",
-    },
-    title: {
-        margin: 0,
-    },
-    links: {
-        display: "flex",
-        gap: "15px",
-    },
-    link: {
-        color: "white",
-        textDecoration: "none",
-    },
-    username: {
-        cursor: "pointer",
-    },
-    dropdownContainer: {
-        position: "relative",
-    },
-    dropdownMenu: {
-        position: "absolute",
-        top: "100%",
-        right: 0,
-        color: "black",
-        padding: "10px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        borderRadius: "5px",
-        zIndex: 100,
-    },
-    menuItem: {
-        display: "block",
-        padding: "5px 10px",
-        textAlign: "left",
-        cursor: "pointer",
-        width: "100%",
-    },
 };
 
 export default Navbar;
