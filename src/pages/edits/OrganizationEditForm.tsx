@@ -1,111 +1,110 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { FormContainer, Input, Label, SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import { FormContainer, Input, Label, SimpleButton, SubTitle, Error } from "../../styles/StyledComponents";
+import { updateOrganizationProfile } from "../../services/OrganizationService";
 
 interface OrganizationEditFormProps {
-    profileData: any; 
+    profileData: {
+        organizationResponseDTO: {
+            email: string;
+            nameOfOrganization: string;
+            country: string;
+            city: string;
+            address: string;
+        };
+    };
     onClose: () => void;
-    onUpdate: (updatedProfile: any) => void;
+}
+
+interface FormInputs {
+    email: string;
+    nameOfOrganization: string;
+    country: string;
+    city: string;
+    address: string;
 }
 
 const OrganizationEditForm: React.FC<OrganizationEditFormProps> = ({ profileData, onClose }) => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        email: profileData.organizationResponseDTO.email,
-        nameOfOrganization: profileData.organizationResponseDTO.nameOfOrganization,
-        country: profileData.organizationResponseDTO.country,
-        city: profileData.organizationResponseDTO.city,
-        address: profileData.organizationResponseDTO.address,
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormInputs>({
+        defaultValues: {
+            email: profileData.organizationResponseDTO.email,
+            nameOfOrganization: profileData.organizationResponseDTO.nameOfOrganization,
+            country: profileData.organizationResponseDTO.country,
+            city: profileData.organizationResponseDTO.city,
+            address: profileData.organizationResponseDTO.address,
+        },
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const onSubmit: SubmitHandler<FormInputs> = async (formData) => {
         try {
-            const response = await fetch(
-                "http://localhost:8080/api/v1/update/organization",
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                    },
-                    body: JSON.stringify(formData),
-                }
-            );
-
-            if (response.ok) {
-                navigate(0);
-                onClose();
-            } else {
-                alert("Failed to update organization profile.");
-            }
-        } catch (err) {
-            console.error("Error updating organization profile:", err);
+            await updateOrganizationProfile(formData);
+            navigate(0);
+            onClose();
+        } catch {
+            alert("Fail! Profile was not updated!");
         }
     };
 
     return (
-        <FormContainer onSubmit={handleSubmit}>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
             <SubTitle>Edit Organization Profile</SubTitle>
+
             <Label>
                 Organization Name:
                 <Input
                     type="text"
-                    name="nameOfOrganization"
-                    value={formData.nameOfOrganization}
-                    onChange={handleChange}
+                    {...register("nameOfOrganization", { required: "Organization name is required" })}
                 />
+                {errors.nameOfOrganization && <Error>{errors.nameOfOrganization.message}</Error>}
             </Label>
+
             <Label>
                 Email:
                 <Input
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    {...register("email", {
+                        required: "Email is required",
+                        pattern: { value: /^\S+@\S+\.\S+$/, message: "Invalid email format" }
+                    })}
                 />
+                {errors.email && <Error>{errors.email.message}</Error>}
             </Label>
+
             <Label>
                 Country:
                 <Input
                     type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleChange}
+                    {...register("country", { required: "Country is required" })}
                 />
+                {errors.country && <Error>{errors.country.message}</Error>}
             </Label>
+
             <Label>
                 City:
                 <Input
                     type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
+                    {...register("city", { required: "City is required" })}
                 />
+                {errors.city && <Error>{errors.city.message}</Error>}
             </Label>
+
             <Label>
                 Address:
                 <Input
                     type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
+                    {...register("address", { required: "Address is required" })}
                 />
+                {errors.address && <Error>{errors.address.message}</Error>}
             </Label>
-            <SimpleButton type="submit">
-                Save Changes
-            </SimpleButton>
-            <SimpleButton onClick={onClose}>
-                Close
-            </SimpleButton>
+
+            <SimpleButton type="submit">Save Changes</SimpleButton>
+            <SimpleButton type="button" onClick={onClose}>Close</SimpleButton>
         </FormContainer>
     );
 };

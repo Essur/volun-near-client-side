@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { GET_ORGANIZATION_PROFILE, GET_VOLUNTEER_PROFILE } from "../config/ApiRoutes";
 
 interface ProfileContextProps {
     profileData: any | null;
@@ -21,9 +22,9 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
         let endpoint = "";
 
         if (subStringOfRole === "organization") {
-            endpoint = "http://localhost:8080/api/v1/organization/my_profile";
+            endpoint = GET_ORGANIZATION_PROFILE;
         } else if (subStringOfRole === "volunteer") {
-            endpoint = "http://localhost:8080/api/v1/volunteer/my_profile";
+            endpoint = GET_VOLUNTEER_PROFILE;
         } else {
             setError("Invalid user role. Unable to fetch profile.");
             console.log(subStringOfRole);

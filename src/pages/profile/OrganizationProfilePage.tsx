@@ -25,10 +25,6 @@ const OrganizationProfilePage: React.FC = () => {
         }, 2000);
     }
 
-    const handleUpdate = (updatedProfile: any) => {
-        console.log("Updated Profile:", updatedProfile);
-    };
-
     const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
         return date.toLocaleDateString("en-US", {
@@ -101,7 +97,6 @@ const OrganizationProfilePage: React.FC = () => {
                         <OrganizationEditForm
                             profileData={profileData}
                             onClose={() => setIsEditModalOpen(!isEditModalOpen)}
-                            onUpdate={handleUpdate}
                         />
                     </ModalContent>
                 </EditModalContainer>

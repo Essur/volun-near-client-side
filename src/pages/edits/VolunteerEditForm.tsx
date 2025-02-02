@@ -1,88 +1,78 @@
-import React, { useState } from "react";
+import React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { FormContainer, Input, Label, SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import { updateVolunteerProfile } from "../../services/VolunteerService";
+import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
 
 interface VolunteerEditFormProps {
-    profileData: any;
+    profileData: {
+        firstName: string;
+        lastName: string;
+        email: string;
+    };
     onClose: () => void;
-    onUpdate: (updatedProfile: any) => void;
+}
+
+interface FormInputs {
+    firstName: string;
+    lastName: string;
+    email: string;
 }
 
 const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onClose }) => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        firstName: profileData.firstName,
-        lastName: profileData.lastName,
-        email: profileData.email,
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormInputs>({
+        defaultValues: {
+            firstName: profileData.firstName,
+            lastName: profileData.lastName,
+            email: profileData.email,
+        },
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const onSubmit: SubmitHandler<FormInputs> = async (formData) => {
         try {
-            const response = await fetch("http://localhost:8080/api/v1/update/volunteer", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (response.ok) {
-                navigate(0)
-                onClose(); 
-            } else {
-                alert("Failed to update profile.");
-            }
-        } catch (err) {
-            console.error("Error updating profile:", err);
+            await updateVolunteerProfile(formData);
+            navigate(0)
+            onClose();
+        } catch (err: any) {
+            alert("Fail! Profile was not updated");
         }
     };
 
     return (
-        <FormContainer onSubmit={handleSubmit}>
-            <SubTitle>Edit Volunteer Profile</SubTitle>
-            <Label>
-                First Name:
-                <Input
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                />
-            </Label>
-            <Label>
-                Last Name:
-                <Input
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                />
-            </Label>
-            <Label>
-                Email:
-                <Input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-            </Label>
-            <SimpleButton type="submit">
-                Save Changes
-            </SimpleButton>
-            <SimpleButton onClick={onClose}>
-                Close
-            </SimpleButton>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
+            <SubTitle>Edit Profile</SubTitle>
+
+            <Input
+                type="text"
+                placeholder="First Name"
+                {...register("firstName", { required: "First name is required" })}
+            />
+            {errors.firstName && <ErrorText>{errors.firstName.message}</ErrorText>}
+
+            <Input
+                type="text"
+                placeholder="Last Name"
+                {...register("lastName", { required: "Last name is required" })}
+            />
+            {errors.lastName && <ErrorText>{errors.lastName.message}</ErrorText>}
+
+            <Input
+                type="email"
+                placeholder="Email"
+                {...register("email", {
+                    required: "Email is required",
+                    pattern: { value: /^\S+@\S+\.\S+$/, message: "Invalid email format" }
+                })}
+            />
+            {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
+
+            <SimpleButton type="submit">Save Changes</SimpleButton>
+            <SimpleButton type="button" onClick={onClose}>Cancel</SimpleButton>
         </FormContainer>
     );
 };

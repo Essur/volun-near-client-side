@@ -1,18 +1,18 @@
 import { useState } from "react";
-import RegistrationForm , { Variant } from "../registration/RegistrationForm";
 import { SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import RegistrationForm, { Variant } from "../registration/RegistrationForm";
 
 export default function RegistrationPage() {
-    const [variant, setVariant] = useState<Variant>("volunteer");
+  const [variant, setVariant] = useState<Variant>("volunteer");
 
-    return (
+  return (
+    <>
+      <SubTitle>Choose your role:</SubTitle>
       <>
-        <SubTitle>Choose your role:</SubTitle>
-        <>
-          <SimpleButton onClick={() => setVariant("volunteer")}>Volunteer</SimpleButton>
-          <SimpleButton onClick={() => setVariant("organization")}>Organization</SimpleButton>
-        </>
-        <RegistrationForm variant={variant} />
+        <SimpleButton onClick={() => setVariant("volunteer")}>Volunteer</SimpleButton>
+        <SimpleButton onClick={() => setVariant("organization")}>Organization</SimpleButton>
       </>
-    );
+      <RegistrationForm variant={variant} />
+    </>
+  );
 }

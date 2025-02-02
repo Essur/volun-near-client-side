@@ -1,8 +1,8 @@
 // RegistrationForm.tsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
 import SubmitRegistration from "../../services/SubmitRegistration";
+import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
 
 export type Variant = "volunteer" | "organization";
 
@@ -43,7 +43,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
 
   const onSubmit: SubmitHandler<VolunteerInputs | OrganizationInputs> = (data) => {
     console.log("Form submitted:", data);
-    SubmitRegistration({variant, formData: data});
+    SubmitRegistration({ variant, formData: data });
   };
 
   return (

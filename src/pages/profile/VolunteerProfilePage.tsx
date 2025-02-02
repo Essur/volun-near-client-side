@@ -111,7 +111,6 @@ const VolunteerProfilePage: React.FC = () => {
                         <VolunteerEditForm
                             profileData={profileData}
                             onClose={() => setIsEditModalOpen(false)}
-                            onUpdate={(updatedProfile) => updateProfile(updatedProfile)}
                         />
                     </ModalContent>
                 </EditModalContainer>
