@@ -1,109 +1,51 @@
-import React, { CSSProperties, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AddPreferenceModal from "../../components/modal/AddPreferenceModal";
+import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useProfile } from "../../contexts/ProfileContext";
-import VolunteerEditForm from "../edits/VolunteerEditForm";
+import { addNewPreference, removePreference, removeVolunteerProfile } from "../../services/VolunteerService";
+import { Details, Error, PreferenceList, PreferenceListItem, SimpleButton, Strong, StyledText, SubTitle } from "../../styles/StyledComponents";
 import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
-import { Input, SimpleButton, SubTitle, Error, Details, StyledText, Strong, StyledList, StyledListItem, PreferenceListItem, PreferenceList } from "../../styles/StyledComponents";
+import VolunteerEditForm from "../edits/VolunteerEditForm";
 
 const VolunteerProfilePage: React.FC = () => {
     const { profileData, error, updateProfile } = useProfile();
     const [showMenu, setShowMenu] = useState(false);
     const [newPreference, setNewPreference] = useState<string>("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleAddPreference = async () => {
-        const role = localStorage.getItem("role");
-        if (
-            newPreference.trim() &&
-            profileData &&
-            role?.substring(6, role.length - 1).toLowerCase() === "volunteer"
-        ) {
-            try {
-                const response = await fetch(
-                    "http://localhost:8080/api/v1/volunteer/set_preferences",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                        },
-                        body: JSON.stringify({ preferences: [newPreference] }),
-                    }
-                );
-
-                if (response.ok) {
-                    updateProfile({
-                        ...profileData,
-                        preferences: [...profileData.preferences, newPreference],
-                    });
-                    setNewPreference("");
-                    console.log("Preference added successfully.");
-                } else {
-                    console.error("Failed to add preference.");
-                }
-            } catch (err) {
-                console.error("Error adding preference:", err);
-            }
-        }
+        addNewPreference(newPreference);
+        updateProfile({
+            ...profileData,
+            preferences: [...profileData.preferences, newPreference],
+        });
+        setNewPreference("");
+        setShowMenu(false);
+        navigate(0);
     };
 
     const handleRemovePreference = async (preferenceId: number) => {
-        try {
-            const response = await fetch(
-                "http://localhost:8080/api/v1/volunteer/delete_preference",
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                    },
-                    body: JSON.stringify({ preferenceId }),
-                }
-            );
-
-            if (response.ok) {
-                updateProfile({
-                    ...profileData,
-                    preferences: profileData.preferences.filter(
-                        (pref: { preferenceId: number }) => pref.preferenceId !== preferenceId
-                    ),
-                });
-            } else {
-                console.error("Failed to remove preference.");
-            }
-        } catch (err) {
-            console.error("Error removing preference:", err);
-        }
+        removePreference(preferenceId);
+        updateProfile({
+            ...profileData,
+            preferences: profileData.preferences.filter(
+                (pref: { preferenceId: number }) => pref.preferenceId !== preferenceId
+            ),
+        });
     };
 
     async function removeProfile(): Promise<void> {
-        try {
-            const response = await fetch(
-                "http://localhost:8080/api/v1/volunteer/delete_profile",
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                    }
-                }
-            );
-
-            if (response.ok) {
-                console.log("Profile was successfully deleted!")
-                setTimeout(() => {
-                    auth?.logout();
-                    navigate("/");
-                }, 2000);
-            } else {
-                console.error("Failed to remove preference.");
-            }
-        } catch (err) {
-            console.error("Error removing preference:", err);
-        }
+        removeVolunteerProfile();
+        setIsConfirmOpen(false);
+        setTimeout(() => {
+            auth?.logout();
+            navigate("/");
+        }, 1000);
     }
 
     return (
@@ -131,15 +73,15 @@ const VolunteerProfilePage: React.FC = () => {
                                 </PreferenceListItem>
                             ))}
                         </PreferenceList>
-                    <SimpleButton onClick={() => setShowMenu(!showMenu)}>
-                        Manage Preferences
-                    </SimpleButton>
-                    <SimpleButton onClick={() => setIsEditModalOpen(true)}>
-                        Edit Profile
-                    </SimpleButton>
-                    <SimpleButton onClick={() => removeProfile()}>
-                        Delete Profile
-                    </SimpleButton>
+                        <SimpleButton onClick={() => setShowMenu(!showMenu)}>
+                            Manage Preferences
+                        </SimpleButton>
+                        <SimpleButton onClick={() => setIsEditModalOpen(true)}>
+                            Edit Profile
+                        </SimpleButton>
+                        <SimpleButton onClick={() => setIsConfirmOpen(true)}>
+                            Delete Profile
+                        </SimpleButton>
                     </Details>
 
                 </>
@@ -147,25 +89,21 @@ const VolunteerProfilePage: React.FC = () => {
                 <>Loading profile data...</>
             )}
 
-            {showMenu && (
-                <EditModalContainer>
-                    <ModalContent>
-                        <SubTitle>Add preference</SubTitle>
-                        <Input
-                            type="text"
-                            placeholder="Add a preference"
-                            value={newPreference}
-                            onChange={(e) => setNewPreference(e.target.value)}
-                        />
-                        <SimpleButton onClick={handleAddPreference}>
-                            Add
-                        </SimpleButton>
-                        <SimpleButton>
-                            Close
-                        </SimpleButton>
-                    </ModalContent>
-                </EditModalContainer>
-            )}
+            <ConfirmationModal
+                isOpen={isConfirmOpen}
+                title="Delete Profile"
+                message="Are you sure you want to delete your profile? This action cannot be undone."
+                onConfirm={removeProfile}
+                onCancel={() => setIsConfirmOpen(false)}
+            />
+
+            <AddPreferenceModal
+                isOpen={showMenu}
+                newPreference={newPreference}
+                setNewPreference={setNewPreference}
+                onAdd={handleAddPreference}
+                onClose={() => setShowMenu(false)}
+            />
 
             {isEditModalOpen && (
                 <EditModalContainer>

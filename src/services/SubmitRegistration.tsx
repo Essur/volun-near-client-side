@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Variant } from "../pages/registration/RegistrationForm";
 import { useNavigate } from 'react-router-dom';
 import { SimpleButton } from "../styles/StyledComponents";
+import { REGISTER_ORGANIZATION, REGISTER_VOLUNTEER } from "../config/ApiRoutes";
 
 
 interface SubmitRegistrationProps {
@@ -19,8 +20,8 @@ const SubmitRegistration: React.FC<SubmitRegistrationProps> = ({ variant, formDa
 
     try {
       const endpoint = variant === "volunteer"
-        ? "http://localhost:8080/api/v1/registration/volunteer"
-        : "http://localhost:8080/api/v1/registration/organization";
+        ? REGISTER_VOLUNTEER
+        : REGISTER_ORGANIZATION;
 
       const response = await fetch(endpoint, {
         method: 'POST',

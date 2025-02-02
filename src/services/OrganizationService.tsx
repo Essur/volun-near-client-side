@@ -1,8 +1,9 @@
-import { OrganizationProfileData, OrganizationResponseDTO } from "../components/types";
+import { OrganizationProfileData, OrganizationResponseDTO } from "../components/Types";
+import { DELETE_ORGANIZATION_PROFILE, GET_ALL_ORGANIZATIONS, GET_INFO_ABOUT_ORGANIZATION } from "../config/ApiRoutes";
 
 export const getAllOrganizations = async (): Promise<OrganizationResponseDTO[]> => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/organization/get_all');
+      const response = await fetch(GET_ALL_ORGANIZATIONS);
       if (!response.ok) {
         throw new Error('Failed to fetch organizations');
       }
@@ -16,7 +17,7 @@ export const getAllOrganizations = async (): Promise<OrganizationResponseDTO[]> 
 
 export const getOrganizationInfo = async (id: number): Promise<OrganizationProfileData | null> => {
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/organization/get_activities?id=${id}`, {
+      const response = await fetch(GET_INFO_ABOUT_ORGANIZATION + `?id=${id}`, {
           method: "GET",
           headers: {
             "Content-type": "application/json"
@@ -31,4 +32,25 @@ export const getOrganizationInfo = async (id: number): Promise<OrganizationProfi
       console.error(error);
       return null;
     }
+};
+
+export const removeOrganizationProfile = async () => {
+  try {
+    const response = await fetch(
+      DELETE_ORGANIZATION_PROFILE,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        }
+      }
+    );
+
+    if (response.ok) {
+      console.log("Profile was successfully deleted!")
+    }
+  } catch (err) {
+    console.error("Error removing preference:", err);
+  }
 };

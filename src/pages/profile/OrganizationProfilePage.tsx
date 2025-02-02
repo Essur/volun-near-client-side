@@ -4,52 +4,29 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import OrganizationEditForm from "../edits/OrganizationEditForm";
 import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag} from "../../styles/StyledComponents";
-import { Activity } from "../../components/types";
+import { Activity } from "../../components/Types";
 import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
+import { removeOrganizationProfile } from "../../services/OrganizationService";
+import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
 
 const OrganizationProfilePage: React.FC = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const { profileData, error } = useProfile();
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
 
     async function removeProfile(): Promise<void> {
-        try {
-            const response = await fetch(
-                "http://localhost:8080/api/v1/organization/delete_profile",
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-                    }
-                }
-            );
-
-            if (response.ok) {
-                console.log("Profile was successfully deleted!")
-                setTimeout(() => {
-                    auth?.logout();
-                    navigate("/");
-                }, 2000);
-            } else {
-                console.error("Failed to remove preference.");
-            }
-        } catch (err) {
-            console.error("Error removing preference:", err);
-        }
+        removeOrganizationProfile();
+        setIsConfirmOpen(false);
+        setTimeout(() => {
+            auth?.logout();
+            navigate("/");
+        }, 2000);
     }
-
-    const handleEdit = () => {
-        setIsEditModalOpen(true);
-    };
 
     const handleUpdate = (updatedProfile: any) => {
         console.log("Updated Profile:", updatedProfile);
-    };
-
-    const closeModal = () => {
-        setIsEditModalOpen(false);
     };
 
     const formatDate = (dateString: string): string => {
@@ -60,6 +37,10 @@ const OrganizationProfilePage: React.FC = () => {
             day: "numeric",
         });
     };
+
+    function addNewActivity(): void {
+        
+    }
 
     return (
         <>
@@ -90,12 +71,15 @@ const OrganizationProfilePage: React.FC = () => {
                                     </StyledListItem>
                                 ))}
                             </StyledList>
+                            <SimpleButton onClick={addNewActivity}>
+                                Add new activity
+                            </SimpleButton>
                         </>
                     )}
-                    <SimpleButton onClick={handleEdit}>
+                    <SimpleButton onClick={() => setIsEditModalOpen(!isEditModalOpen)}>
                         Edit Profile
                     </SimpleButton>
-                    <SimpleButton onClick={removeProfile}>
+                    <SimpleButton onClick={() => setIsConfirmOpen(true)}>
                         Delete Profile
                     </SimpleButton>
                 </>
@@ -103,12 +87,20 @@ const OrganizationProfilePage: React.FC = () => {
                 <>Loading profile data...</>
             )}
 
+            <ConfirmationModal
+                isOpen={isConfirmOpen}
+                title="Delete Profile"
+                message="Are you sure you want to delete your profile? This action cannot be undone."
+                onConfirm={removeProfile}
+                onCancel={() => setIsConfirmOpen(false)}
+            />
+
             {isEditModalOpen && (
                 <EditModalContainer>
                     <ModalContent>
                         <OrganizationEditForm
                             profileData={profileData}
-                            onClose={closeModal}
+                            onClose={() => setIsEditModalOpen(!isEditModalOpen)}
                             onUpdate={handleUpdate}
                         />
                     </ModalContent>

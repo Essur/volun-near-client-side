@@ -31,6 +31,7 @@ export const Label = styled.label`
 export const Input = styled.input`
   width: 95%;
   padding: 10px;
+  margin: 3px 0;
   font-size: 16px;
   color: var(--text-color);
   background: var(--dropdown-bg);
@@ -50,6 +51,12 @@ export const StyledText = styled.p`
     margin: 5px;
 `;
 
+export const ErrorText = styled.p`
+    color: red;
+    font-size: 14px;
+    margin: 0 0 10px;
+`;
+
 export const Strong = styled.strong`
     color: var(--text-color);
 `;
@@ -60,6 +67,11 @@ export const Title = styled.h1`
 `;
 
 export const SubTitle = styled.h2`
+    margin: 10px;
+    color: var(--text-color);
+`;
+
+export const ThirdTitle = styled.h3`
     margin: 10px;
     color: var(--text-color);
 `;
@@ -160,6 +172,15 @@ export const SimpleButton = styled.button`
     &:hover {
         background: var(--button-hover);
     }
+`;
+
+export const CancelButton = styled.button`
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: 1px solid var(--button-border);
+    border-radius: 5px;
+    cursor: pointer;
 `;
 
 export const Loading = styled.div`

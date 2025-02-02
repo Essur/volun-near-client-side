@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { OrganizationResponseDTO } from "../../components/types";
+import { OrganizationResponseDTO } from "../../components/Types";
 import { getAllOrganizations } from "../../services/OrganizationService";
 import { Loading, Error, SubTitle, OrganizationList, OrganizationItem, OrganizationName } from "../../styles/StyledComponents";
 import { OrganizationDetails } from "../../styles/StyledContainers";

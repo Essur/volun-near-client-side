@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { OrganizationProfileData } from "../../components/types";
+import { OrganizationProfileData } from "../../components/Types";
 import { getOrganizationInfo } from "../../services/OrganizationService";
 import { Details, Loading, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag, Title } from "../../styles/StyledComponents";
 

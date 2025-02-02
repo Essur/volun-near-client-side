@@ -27,9 +27,9 @@ export const NavbarContainer = styled.nav`
 `;
 
 export const MdContainer = styled.div`
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
+  max-width: 100%;
+  margin: 0px auto;
+  padding: 10px;
   background: var(--main-content-container);
   color: var(--text-color);
   border-radius: 8px;
@@ -70,6 +70,40 @@ export const ModalContent = styled.div`
     position: relative;
 `;
 
+export const ConfirmModal = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+`;
+
+export const ConfirmContent = styled.div`
+    background: var(--navbar-bg);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+export const ModalOverlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+`;
+
 export const StyledFooter = styled.footer`
     width: 100%;
     padding: 10px;
@@ -78,4 +112,3 @@ export const StyledFooter = styled.footer`
     color: var(--text-color);
     border-top: 1px solid var(--button-border);
 `;
-

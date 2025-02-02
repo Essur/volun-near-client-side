@@ -1,63 +1,55 @@
 import React, { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { FormContainer, Input, SubTitle, SimpleButton, Error } from "../styles/StyledComponents";
+import { useAuth } from "../contexts/AuthContext";
+import { loginUser } from "../services/AuthService";
+import { Error, FormContainer, Input, SimpleButton, SubTitle } from "../styles/StyledComponents";
+
+
+interface LoginInputs {
+    username: string;
+    password: string;
+}
 
 const LoginPage: React.FC = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>();
+    const [loginError, setLoginError] = useState<string | null>();
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        try{
-            const response = await fetch("http://localhost:8080/api/v1/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                login(username, data.token, data.role);
-                setError(null);
-                navigate("/");
-            } else {
-                setError("Wrong login or password");
-                console.error("Login failed");
-            }
-        } catch(err){
-            console.error("Error during login:", err);
-            setError("An error occurred. Please try again later.");
+    const onSubmit: SubmitHandler<LoginInputs> = async ({ username, password }) => {
+        try {
+            const data = await loginUser(username, password);
+            login(username, data.token, data.role);
+            setLoginError(null);
+            navigate("/");
+        } catch {
+            setLoginError("Wrong username or password!");
         }
     };
 
     return (
-        <FormContainer onSubmit={handleSubmit}>
+        <FormContainer onSubmit={handleSubmit(onSubmit)}>
             <SubTitle>Login</SubTitle>
             <Input
                 type="text"
                 placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                {...register("username", { required: "Username is required" })}
             />
+            {errors.username && <Error>{errors.username.message}</Error>}
+
             <Input
                 type="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password", { required: "Password is required" })}
             />
-            
-            <SimpleButton type="submit"> Login </SimpleButton>
-            {error && <Error>{error}</Error>}
+            {errors.password && <Error>{errors.password.message}</Error>}
+
+            <SimpleButton type="submit">Login</SimpleButton>
+            {loginError && <Error>{loginError}</Error>}
         </FormContainer>
     );
 };
+
 
 export default LoginPage;

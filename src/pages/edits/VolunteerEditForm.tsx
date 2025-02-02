@@ -37,7 +37,6 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
             });
 
             if (response.ok) {
-                alert("Profile updated successfully!");
                 navigate(0)
                 onClose(); 
             } else {
