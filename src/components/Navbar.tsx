@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
     const role = localStorage.getItem("role");
-    let sRole = role?.substring(6, role.length - 1).toLowerCase();
+    const sRole = role?.substring(5, role.length).toLowerCase();
     const navigate = useNavigate();
 
     const handleLogout = () => {

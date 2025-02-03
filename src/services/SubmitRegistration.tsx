@@ -1,61 +1,37 @@
-// SubmitRegistration.tsx
-import React, { useState } from "react";
-import { Variant } from "../pages/registration/RegistrationForm";
-import { useNavigate } from 'react-router-dom';
-import { SimpleButton } from "../styles/StyledComponents";
 import { REGISTER_ORGANIZATION, REGISTER_VOLUNTEER } from "../config/ApiRoutes";
+import { Variant } from "../pages/registration/RegistrationForm";
 
-
+// services/SubmitRegistration.ts
 interface SubmitRegistrationProps {
   variant: Variant;
   formData: { [key: string]: any };
 }
 
-const SubmitRegistration: React.FC<SubmitRegistrationProps> = ({ variant, formData }) => {
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
-  
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+const SubmitRegistration = async ({ variant, formData }: SubmitRegistrationProps) => {
+  try {
+    const endpoint = variant === "volunteer" ? REGISTER_VOLUNTEER : REGISTER_ORGANIZATION;
 
-    try {
-      const endpoint = variant === "volunteer"
-        ? REGISTER_VOLUNTEER
-        : REGISTER_ORGANIZATION;
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok){
-        console.log("Registration successful: ", response.status);
-        setMessage("Registration succesfull. Redireting...");
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else if (response.status === 409) {
-        console.log("Registration failed: ", response.status);
-        setMessage("User already exists!");
-
-      }
-    } catch (error) {
-      console.error("Registration failed: ", error);
-      setMessage("An error occurred. Please try again.");
+    if (response.ok) {
+      console.log("Registration successful: ", response.status);
+      return { success: true, message: "Registration successful. Redirecting..." };
+    } else if (response.status === 409) {
+      console.log("Registration failed: ", response.status);
+      return { success: false, message: "User already exists!" };
+    } else {
+      return { success: false, message: "An error occurred. Please try again." };
     }
-    
-  };
-
-  return (
-    <>
-      <SimpleButton onClick={handleSubmit}>
-        Submit
-      </SimpleButton>
-      {message && <p>{message}</p>}
-    </>
-  );
+  } catch (error) {
+    console.error("Registration failed: ", error);
+    return { success: false, message: "An error occurred. Please try again." };
+  }
 };
 
 export default SubmitRegistration;

@@ -1,12 +1,13 @@
 const HOST = "http://localhost:8080"
 const API_URL = HOST + "/api/v1";
-const ORGANIZATION = API_URL + "/organization";
 const VOLUNTEER = API_URL + "/volunteer";
+const ORGANIZATION = API_URL + "/organization";
 
 /**
  * Users management
  */
 export const LOGIN = API_URL + "/login";
+export const REFRESH_TOKEN = API_URL + "/refresh_token"
 export const REGISTER_ROUTE_SECURITY = API_URL + "/registration";
 export const REGISTER_VOLUNTEER = API_URL + "/registration/volunteer";
 export const REGISTER_ORGANIZATION = API_URL + "/registration/organization";

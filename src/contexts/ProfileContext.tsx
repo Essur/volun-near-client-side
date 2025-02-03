@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { GET_ORGANIZATION_PROFILE, GET_VOLUNTEER_PROFILE } from "../config/ApiRoutes";
+import { useAuth } from "./AuthContext";
 
 interface ProfileContextProps {
     profileData: any | null;
@@ -13,14 +14,26 @@ const ProfileContext = createContext<ProfileContextProps | undefined>(undefined)
 export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [profileData, setProfileData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const { refreshToken, logout } = useAuth();
 
     const fetchProfile = async () => {
+        if (!location.pathname.includes("-profile")) return;
+
         const role = localStorage.getItem("role");
-        const subStringOfRole = role?.substring(6, role.length - 1).toLowerCase();
-        const token = localStorage.getItem("jwtToken");
+        const subStringOfRole = role?.substring(5, role.length).toLowerCase();
+        let token = localStorage.getItem("jwtToken");
+
+        if (isTokenExpired()) {
+            await refreshToken();
+            token = localStorage.getItem("jwtToken");
+            if (!token || !role) {
+                window.location.href = "/login"; // Redirect if refresh fails
+                return;
+            }
+        }
 
         let endpoint = "";
-
+    
         if (subStringOfRole === "organization") {
             endpoint = GET_ORGANIZATION_PROFILE;
         } else if (subStringOfRole === "volunteer") {
@@ -30,7 +43,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
             console.log(subStringOfRole);
             return;
         }
-
+    
         try {
             const response = await fetch(endpoint, {
                 method: "GET",
@@ -39,18 +52,26 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
                     "Content-Type": "application/json",
                 },
             });
-
+    
             if (response.ok) {
                 const data = await response.json();
                 setProfileData(data);
-                setError(null);
             } else {
+                logout();
+                window.location.href = "/login";
                 setError(`Error: ${response.status} ${response.statusText}`);
             }
         } catch (err) {
             setError("Failed to fetch profile data. Please try again later.");
         }
     };
+
+    const isTokenExpired = (): boolean => {
+        const expiryTime = localStorage.getItem("tokenExpiry");
+        if (!expiryTime) return true;
+    
+        return Date.now() > parseInt(expiryTime, 10);
+    };    
 
     const updateProfile = (data: any) => {
         setProfileData(data);

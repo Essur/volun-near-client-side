@@ -1,5 +1,4 @@
-// RegistrationForm.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import SubmitRegistration from "../../services/SubmitRegistration";
 import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
@@ -28,22 +27,25 @@ interface OrganizationInputs {
   password: string;
 }
 
-
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<VolunteerInputs | OrganizationInputs>();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<VolunteerInputs | OrganizationInputs>();
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     reset();
   }, [variant, reset]);
 
-  const onSubmit: SubmitHandler<VolunteerInputs | OrganizationInputs> = (data) => {
-    console.log("Form submitted:", data);
-    SubmitRegistration({ variant, formData: data });
+  const onSubmit: SubmitHandler<VolunteerInputs | OrganizationInputs> = async (data) => {
+    const response = await SubmitRegistration({ variant, formData: data });
+    
+    if (response.success) {
+      setMessage(response.message);
+      setTimeout(() => {
+        window.location.href = "/login"; // Redirecting to login page
+      }, 2000);
+    } else {
+      setMessage(response.message);
+    }
   };
 
   return (
@@ -92,7 +94,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
         </>
       )}
 
-      <SimpleButton type="submit">Register</SimpleButton>
+      {/* SimpleButton triggers onSubmit manually */}
+      <SimpleButton type="submit">
+        Register
+      </SimpleButton>
+
+      {message && <p>{message}</p>}
     </FormContainer>
   );
 };

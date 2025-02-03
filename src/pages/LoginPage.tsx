@@ -15,12 +15,13 @@ const LoginPage: React.FC = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>();
     const [loginError, setLoginError] = useState<string | null>();
     const navigate = useNavigate();
+    const expiryTime = 3600000;
     const { login } = useAuth();
 
     const onSubmit: SubmitHandler<LoginInputs> = async ({ username, password }) => {
         try {
             const data = await loginUser(username, password);
-            login(username, data.token, data.role);
+            login(username, data.token, data.refreshToken, data.role, expiryTime);
             setLoginError(null);
             navigate("/");
         } catch {
