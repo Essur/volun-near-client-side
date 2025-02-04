@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { GET_ORGANIZATION_PROFILE, GET_VOLUNTEER_PROFILE } from "../config/ApiRoutes";
 import { useAuth } from "./AuthContext";
 
@@ -78,7 +78,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     const updateProfile = (data: any) => {
         setProfileData(data);
     };
-    
+        
     return (
         <ProfileContext.Provider value={{ profileData, error, fetchProfile, updateProfile }}>
             {children}
