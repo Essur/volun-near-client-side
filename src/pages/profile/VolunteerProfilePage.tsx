@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddPreferenceModal from "../../components/modal/AddPreferenceModal";
 import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
@@ -10,7 +10,7 @@ import { EditModalContainer, ModalContent } from "../../styles/StyledContainers"
 import VolunteerEditForm from "../edits/VolunteerEditForm";
 
 const VolunteerProfilePage: React.FC = () => {
-    const { profileData, error, updateProfile } = useProfile();
+    const { profileData, error, updateProfile, fetchProfile } = useProfile();
     const [showMenu, setShowMenu] = useState(false);
     const [newPreference, setNewPreference] = useState<string>("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -47,6 +47,12 @@ const VolunteerProfilePage: React.FC = () => {
             navigate("/");
         }, 1000);
     }
+
+    useEffect(() => {
+        if (!profileData){
+            fetchProfile();
+        }
+    })
 
     return (
         <>

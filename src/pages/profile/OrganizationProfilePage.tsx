@@ -1,18 +1,18 @@
-import React, { useContext, useState } from "react";
-import { useProfile } from "../../contexts/ProfileContext";
-import { AuthContext } from "../../contexts/AuthContext";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import OrganizationEditForm from "../edits/OrganizationEditForm";
-import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag} from "../../styles/StyledComponents";
-import { Activity } from "../../components/Types";
-import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
-import { removeOrganizationProfile } from "../../services/OrganizationService";
 import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
+import { Activity } from "../../components/Types";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useProfile } from "../../contexts/ProfileContext";
+import { removeOrganizationProfile } from "../../services/OrganizationService";
+import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag } from "../../styles/StyledComponents";
+import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
+import OrganizationEditForm from "../edits/OrganizationEditForm";
 
 const OrganizationProfilePage: React.FC = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const { profileData, error } = useProfile();
+    const { profileData, error, fetchProfile} = useProfile();
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -37,6 +37,11 @@ const OrganizationProfilePage: React.FC = () => {
     function addNewActivity(): void {
         
     }
+    
+    useEffect(() => {
+        if (!profileData)
+            fetchProfile();
+    })
 
     return (
         <>

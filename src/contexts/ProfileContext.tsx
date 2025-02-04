@@ -14,36 +14,38 @@ const ProfileContext = createContext<ProfileContextProps | undefined>(undefined)
 export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [profileData, setProfileData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
-    const { refreshToken, logout } = useAuth();
+    const { refreshToken, logout, role } = useAuth();
+
+
 
     const fetchProfile = async () => {
         if (!location.pathname.includes("-profile")) return;
 
-        const role = localStorage.getItem("role");
-        const subStringOfRole = role?.substring(5, role.length).toLowerCase();
         let token = localStorage.getItem("jwtToken");
+        const subStringOfRole = role?.substring(5, role.length).toLowerCase();
 
         if (isTokenExpired()) {
             await refreshToken();
             token = localStorage.getItem("jwtToken");
             if (!token || !role) {
-                window.location.href = "/login"; // Redirect if refresh fails
+                window.location.href = "/login";
                 return;
             }
         }
 
         let endpoint = "";
-    
+
         if (subStringOfRole === "organization") {
             endpoint = GET_ORGANIZATION_PROFILE;
         } else if (subStringOfRole === "volunteer") {
             endpoint = GET_VOLUNTEER_PROFILE;
         } else {
+            window.location.reload;
             setError("Invalid user role. Unable to fetch profile.");
             console.log(subStringOfRole);
             return;
         }
-    
+
         try {
             const response = await fetch(endpoint, {
                 method: "GET",
@@ -52,7 +54,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
                     "Content-Type": "application/json",
                 },
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
                 setProfileData(data);
@@ -69,17 +71,16 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     const isTokenExpired = (): boolean => {
         const expiryTime = localStorage.getItem("tokenExpiry");
         if (!expiryTime) return true;
-    
+
         return Date.now() > parseInt(expiryTime, 10);
-    };    
+    };
 
     const updateProfile = (data: any) => {
         setProfileData(data);
     };
 
-    useEffect(() => {
-        fetchProfile();
-    }, []);
+  
+
 
     return (
         <ProfileContext.Provider value={{ profileData, error, fetchProfile, updateProfile }}>
