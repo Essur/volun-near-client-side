@@ -78,10 +78,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     const updateProfile = (data: any) => {
         setProfileData(data);
     };
-
-  
-
-
+    
     return (
         <ProfileContext.Provider value={{ profileData, error, fetchProfile, updateProfile }}>
             {children}
