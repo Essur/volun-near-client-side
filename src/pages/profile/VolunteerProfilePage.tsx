@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AddPreferenceModal from "../../components/modal/AddPreferenceModal";
 import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useProfile } from "../../contexts/ProfileContext";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
 import { addNewPreference, removePreference, removeVolunteerProfile } from "../../services/VolunteerService";
 import { Details, Error, PreferenceList, PreferenceListItem, SimpleButton, Strong, StyledText, SubTitle } from "../../styles/GlobalStyledComponents";
 import { EditModalContainer, ModalContent } from "../../styles/GlobalStyledContainers";
 import VolunteerEditForm from "../edits/VolunteerEditForm";
-import { useAppNavigation } from "../../services/utils/AppNavigation";
 
 const VolunteerProfilePage: React.FC = () => {
     const { profileData, error, updateProfile, fetchProfile } = useProfile();
