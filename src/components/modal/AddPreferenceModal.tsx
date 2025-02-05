@@ -1,6 +1,6 @@
 import React from "react";
-import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
-import { Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import { EditModalContainer, ModalContent } from "../../styles/GlobalStyledContainers";
+import { Input, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
 
 interface AddPreferenceModalProps {
     isOpen: boolean;

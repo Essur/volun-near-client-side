@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 import {
-    Title,
-    StyledLink,
-    Username,
     DropdownContainer,
     DropdownMenu,
     MenuItem,
     SignInLink,
     SignUpLink,
+    StyledLink,
     ThemeButton,
-} from "../styles/StyledComponents";
-import { useTheme } from "../contexts/ThemeContext";
-import { LinksContainer, NavbarContainer } from "../styles/StyledContainers";
+    Title,
+    Username,
+} from "../styles/GlobalStyledComponents";
+import { LinksContainer, NavbarContainer } from "../styles/GlobalStyledContainers";
+import { getRole } from "../services/utils/RoleService";
+import { useAppNavigation } from "../services/utils/AppNavigation";
 
 const Navbar: React.FC = () => {
     const { isLoggedIn, username, logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
     const [menuOpen, setMenuOpen] = useState(false);
-    const role = localStorage.getItem("role");
-    const sRole = role?.substring(5, role.length).toLowerCase();
-    const navigate = useNavigate();
+    const sRole = getRole();
+    const { goTo } = useAppNavigation();
 
     const handleLogout = () => {
         logout();
-        navigate("/");
+        goTo("/");
     };
 
     useEffect(() => {
@@ -48,6 +49,7 @@ const Navbar: React.FC = () => {
             <LinksContainer>
                 <StyledLink to="/">Home</StyledLink>
                 <StyledLink to="/organizations">Organizations</StyledLink>
+                <StyledLink to="/all-activities">Volunteering opportuinities</StyledLink>
                 <StyledLink to="/about">About</StyledLink>
                 {isLoggedIn ? (
                     <DropdownContainer className="dropdown-container">
@@ -57,12 +59,17 @@ const Navbar: React.FC = () => {
                         {menuOpen && (
                             <DropdownMenu>
                                 <MenuItem onClick={() =>
-                                    sRole === "volunteer" 
-                                        ? navigate("/volunteer-profile") 
-                                        : navigate("/organization-profile")
+                                    sRole === "volunteer"
+                                        ? goTo("/volunteer-profile")
+                                        : goTo("/organization-profile")
                                 }>
                                     View Profile
                                 </MenuItem>
+                                {sRole === "organization" && (
+                                    <MenuItem>
+                                        My activities
+                                    </MenuItem>
+                                )}
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </DropdownMenu>
                         )}

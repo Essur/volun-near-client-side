@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { OrganizationProfileData } from "../../components/Types";
+import { OrganizationProfileData } from "../../types/Types";
 import { getOrganizationInfo } from "../../services/OrganizationService";
-import { Details, Loading, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag, Title } from "../../styles/StyledComponents";
+import { Details, Loading, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag, Title } from "../../styles/GlobalStyledComponents";
+import { formatDate } from "../../services/utils/FormatDateService";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
+import { MoreDetails } from "../../styles/StyledActivitesList";
 
 const OrganizationInfoPage: React.FC = () => {
     const { id } = useParams();
+    const { goToWithId } = useAppNavigation();
     const [organization, setOrganization] = useState<OrganizationProfileData | null>(null);
 
     useEffect(() => {
@@ -20,15 +24,6 @@ const OrganizationInfoPage: React.FC = () => {
     }, [id]);
 
     if (!organization) return <Loading>Loading...</Loading>;
-
-    const formatDate = (dateString: string): string => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
-    };
 
     return (
         <>
@@ -51,6 +46,7 @@ const OrganizationInfoPage: React.FC = () => {
                                 <StyledText><Strong>Date:</Strong> {formatDate(activity.dateOfPlace)}</StyledText>
                                 <StyledText>{activity.description}</StyledText>
                                 <Tag>{activity.kindOfActivity}</Tag>
+                                <MoreDetails onClick={() => goToWithId("/activity", activity.id)}>Details</MoreDetails>
                             </StyledListItem>
                         ))}
                     </StyledList>

@@ -1,4 +1,4 @@
-import { OrganizationProfileData, OrganizationResponseDTO } from "../components/Types";
+import { OrganizationProfileData, OrganizationResponseDTO } from "../types/Types";
 import { DELETE_ORGANIZATION_PROFILE, GET_ALL_ORGANIZATIONS, GET_INFO_ABOUT_ORGANIZATION, UPDATE_ORGANIZATION_PROFILE } from "../config/ApiRoutes";
 
 export const updateOrganizationProfile = async (formData: { nameOfOrganization: string, country: string, city: string, address: string, email: string }) => {
@@ -32,8 +32,8 @@ export const getAllOrganizations = async (): Promise<OrganizationResponseDTO[]> 
     }
     const data: OrganizationResponseDTO[] = await response.json();
     return data;
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     return [];
   }
 };
@@ -51,8 +51,8 @@ export const getOrganizationInfo = async (id: number): Promise<OrganizationProfi
     }
     const data: OrganizationProfileData = await response.json();
     return data;
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     return null;
   }
 };

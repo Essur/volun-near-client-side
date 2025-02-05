@@ -5,9 +5,10 @@ import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useProfile } from "../../contexts/ProfileContext";
 import { addNewPreference, removePreference, removeVolunteerProfile } from "../../services/VolunteerService";
-import { Details, Error, PreferenceList, PreferenceListItem, SimpleButton, Strong, StyledText, SubTitle } from "../../styles/StyledComponents";
-import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
+import { Details, Error, PreferenceList, PreferenceListItem, SimpleButton, Strong, StyledText, SubTitle } from "../../styles/GlobalStyledComponents";
+import { EditModalContainer, ModalContent } from "../../styles/GlobalStyledContainers";
 import VolunteerEditForm from "../edits/VolunteerEditForm";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
 
 const VolunteerProfilePage: React.FC = () => {
     const { profileData, error, updateProfile, fetchProfile } = useProfile();
@@ -16,7 +17,7 @@ const VolunteerProfilePage: React.FC = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const auth = useContext(AuthContext);
-    const navigate = useNavigate();
+    const { goTo } = useAppNavigation();
 
     const handleAddPreference = async () => {
         addNewPreference(newPreference);
@@ -26,7 +27,7 @@ const VolunteerProfilePage: React.FC = () => {
         });
         setNewPreference("");
         setShowMenu(false);
-        navigate(0);
+        goTo(0);
     };
 
     const handleRemovePreference = async (preferenceId: number) => {
@@ -44,7 +45,7 @@ const VolunteerProfilePage: React.FC = () => {
         setIsConfirmOpen(false);
         setTimeout(() => {
             auth?.logout();
-            navigate("/");
+            goTo("/");
         }, 1000);
     }
 

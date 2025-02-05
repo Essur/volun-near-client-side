@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { loginUser } from "../services/AuthService";
-import { Error, FormContainer, Input, SimpleButton, SubTitle } from "../styles/StyledComponents";
+import { Error, FormContainer, Input, SimpleButton, SubTitle } from "../styles/GlobalStyledComponents";
 
 
 interface LoginInputs {

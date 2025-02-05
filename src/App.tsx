@@ -10,7 +10,9 @@ import LoginPage from './pages/LoginPage.tsx';
 import OrganizationProfilePage from './pages/profile/OrganizationProfilePage.tsx';
 import VolunteerProfilePage from './pages/profile/VolunteerProfilePage.tsx';
 import RegistrationPage from './pages/registration/RegistrationPage';
-import { AppContainer, MainContentContainer } from './styles/StyledContainers.tsx';
+import { AppContainer, MainContentContainer } from './styles/GlobalStyledContainers.tsx';
+import AllActivitiesPage from './pages/info/AllActivitiesPage.tsx';
+import ActivityInfoPage from './pages/info/ActivityInfoPage.tsx';
 
 const App: React.FC = () => {
     return (
@@ -21,8 +23,10 @@ const App: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<AboutProjectPage />} />
+                        <Route path="/all-activities" element={<AllActivitiesPage/>}/>
                         <Route path="/organizations" element={<AllOrganizationsPage/>}/>
                         <Route path="/organization/:id" element={<OrganizationInfoPage/>}/>
+                        <Route path="/activity/:id" element={<ActivityInfoPage/>}/>
                         <Route path="/volunteer-profile" element={<VolunteerProfilePage />} />
                         <Route path="/organization-profile" element={<OrganizationProfilePage />} />
                         <Route path="/login" element={<LoginPage />} />

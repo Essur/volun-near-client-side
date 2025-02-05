@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import {FeatureItem, FeaturesList } from "../../styles/StyledComponents";
-import { MdContainer } from "../../styles/StyledContainers";
+import {FeatureItem, FeaturesList } from "../../styles/GlobalStyledComponents";
+import { MdContainer } from "../../styles/GlobalStyledContainers";
 import { fetchMarkdownContent } from "../../services/utils/FetchMdService";
 
 const AboutProjectPage: React.FC = () => {

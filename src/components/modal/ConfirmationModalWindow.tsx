@@ -1,6 +1,6 @@
 import React from "react";
-import { CancelButton, SimpleButton, StyledText, ThirdTitle } from "../../styles/StyledComponents";
-import { ModalContent, ModalOverlay } from "../../styles/StyledContainers";
+import { CancelButton, SimpleButton, StyledText, ThirdTitle } from "../../styles/GlobalStyledComponents";
+import { ModalContent, ModalOverlay } from "../../styles/GlobalStyledContainers";
 
 interface ConfirmationModalProps {
     isOpen: boolean;

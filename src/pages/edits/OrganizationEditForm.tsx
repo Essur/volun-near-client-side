@@ -1,8 +1,8 @@
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { FormContainer, Input, Label, SimpleButton, SubTitle, Error } from "../../styles/StyledComponents";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
 import { updateOrganizationProfile } from "../../services/OrganizationService";
+import { Error, FormContainer, Input, Label, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
 
 interface OrganizationEditFormProps {
     profileData: {
@@ -26,7 +26,7 @@ interface FormInputs {
 }
 
 const OrganizationEditForm: React.FC<OrganizationEditFormProps> = ({ profileData, onClose }) => {
-    const navigate = useNavigate();
+    const { goTo } = useAppNavigation();
     const {
         register,
         handleSubmit,
@@ -44,7 +44,7 @@ const OrganizationEditForm: React.FC<OrganizationEditFormProps> = ({ profileData
     const onSubmit: SubmitHandler<FormInputs> = async (formData) => {
         try {
             await updateOrganizationProfile(formData);
-            navigate(0);
+            goTo(0);
             onClose();
         } catch {
             alert("Fail! Profile was not updated!");

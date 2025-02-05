@@ -2,7 +2,8 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { updateVolunteerProfile } from "../../services/VolunteerService";
-import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
 
 interface VolunteerEditFormProps {
     profileData: {
@@ -20,7 +21,7 @@ interface FormInputs {
 }
 
 const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onClose }) => {
-    const navigate = useNavigate();
+    const { goTo } = useAppNavigation();
     const {
         register,
         handleSubmit,
@@ -36,7 +37,7 @@ const VolunteerEditForm: React.FC<VolunteerEditFormProps> = ({ profileData, onCl
     const onSubmit: SubmitHandler<FormInputs> = async (formData) => {
         try {
             await updateVolunteerProfile(formData);
-            navigate(0)
+            goTo(0)
             onClose();
         } catch (err: any) {
             alert("Fail! Profile was not updated");

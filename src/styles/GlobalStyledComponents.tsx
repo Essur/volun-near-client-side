@@ -121,13 +121,15 @@ export const DropdownContainer = styled.div`
 export const DropdownMenu = styled.div`
     position: absolute;
     top: 100%;
-    right: 0;
     background: var(--dropdown-bg);
     color: var(--text-color);
     padding: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     z-index: 100;
+    width: max-content;
+    right: 5px;
+    left: -15px;
 `;
 
 export const MenuItem = styled.button`

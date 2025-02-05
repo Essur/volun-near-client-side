@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import SubmitRegistration from "../../services/SubmitRegistration";
-import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
 
 export type Variant = "volunteer" | "organization";
 

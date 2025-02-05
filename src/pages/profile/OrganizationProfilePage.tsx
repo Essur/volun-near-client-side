@@ -1,43 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
 import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
-import { Activity } from "../../components/Types";
+import { Activity } from "../../types/Types";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useProfile } from "../../contexts/ProfileContext";
 import { removeOrganizationProfile } from "../../services/OrganizationService";
-import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag } from "../../styles/StyledComponents";
-import { EditModalContainer, ModalContent } from "../../styles/StyledContainers";
+import { formatDate } from "../../services/utils/FormatDateService";
+import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag } from "../../styles/GlobalStyledComponents";
+import { EditModalContainer, ModalContent } from "../../styles/GlobalStyledContainers";
 import OrganizationEditForm from "../edits/OrganizationEditForm";
 
 const OrganizationProfilePage: React.FC = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-    const { profileData, error, fetchProfile} = useProfile();
+    const { profileData, error, fetchProfile } = useProfile();
     const auth = useContext(AuthContext);
-    const navigate = useNavigate();
+    const { goTo } = useAppNavigation();
 
     async function removeProfile(): Promise<void> {
         removeOrganizationProfile();
         setIsConfirmOpen(false);
         setTimeout(() => {
             auth?.logout();
-            navigate("/");
+            goTo("/");
         }, 2000);
     }
 
-    const formatDate = (dateString: string): string => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
-    };
-
     function addNewActivity(): void {
-        
+
     }
-    
+
     useEffect(() => {
         if (!profileData)
             fetchProfile();

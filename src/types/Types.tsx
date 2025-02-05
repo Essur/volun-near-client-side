@@ -21,3 +21,7 @@ export interface OrganizationProfileData {
     organizationResponseDTO: OrganizationResponseDTO;
     activities: Activity[];
 }
+
+export interface ActivityInfo extends Activity{
+    organizationId: number;
+}

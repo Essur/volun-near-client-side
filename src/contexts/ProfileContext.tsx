@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { GET_ORGANIZATION_PROFILE, GET_VOLUNTEER_PROFILE } from "../config/ApiRoutes";
 import { useAuth } from "./AuthContext";
+import { getRole } from "../services/utils/RoleService";
 
 interface ProfileContextProps {
     profileData: any | null;
@@ -22,7 +23,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
         if (!location.pathname.includes("-profile")) return;
 
         let token = localStorage.getItem("jwtToken");
-        const subStringOfRole = role?.substring(5, role.length).toLowerCase();
+        const sRole = getRole();
 
         if (isTokenExpired()) {
             await refreshToken();
@@ -35,14 +36,14 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
 
         let endpoint = "";
 
-        if (subStringOfRole === "organization") {
+        if (sRole === "organization") {
             endpoint = GET_ORGANIZATION_PROFILE;
-        } else if (subStringOfRole === "volunteer") {
+        } else if (sRole === "volunteer") {
             endpoint = GET_VOLUNTEER_PROFILE;
         } else {
             window.location.reload;
             setError("Invalid user role. Unable to fetch profile.");
-            console.log(subStringOfRole);
+            console.log(sRole);
             return;
         }
 

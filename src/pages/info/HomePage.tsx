@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchMarkdownContent } from "../../services/utils/FetchMdService";
-import { MdContainer } from "../../styles/StyledContainers";
+import { MdContainer } from "../../styles/GlobalStyledContainers";
 import ReactMarkdown from "react-markdown";
 
 const Home: React.FC = () => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SimpleButton, SubTitle } from "../../styles/StyledComponents";
+import { SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
 import RegistrationForm, { Variant } from "../registration/RegistrationForm";
 
 export default function RegistrationPage() {
