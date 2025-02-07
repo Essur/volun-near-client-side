@@ -1,9 +1,9 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { updateVolunteerProfile } from "../../services/VolunteerService";
-import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
-import { useAppNavigation } from "../../services/utils/AppNavigation";
+import { useAppNavigation } from "../../../services/utils/AppNavigation";
+import { updateVolunteerProfile } from "../../../services/VolunteerService";
+import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../../styles/GlobalStyledComponents";
+
 
 interface VolunteerEditFormProps {
     profileData: {

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldErrors, SubmitHandler, useForm, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import CountryInputField from "../../components/CountryInputField";
 import SubmitRegistration from "../../services/SubmitRegistration";
 import { ErrorText, FormContainer, Input, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
+import { OrganizationInputs, VolunteerInputs } from "../../types/Types";
 
 export type Variant = "volunteer" | "organization";
 
@@ -9,26 +11,8 @@ interface RegistrationFormProps {
   variant: Variant;
 }
 
-interface VolunteerInputs {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-}
-
-interface OrganizationInputs {
-  nameOfOrganization: string;
-  country: string;
-  city: string;
-  address: string;
-  email: string;
-  username: string;
-  password: string;
-}
-
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<VolunteerInputs | OrganizationInputs>();
+  const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm<VolunteerInputs | OrganizationInputs>();
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -37,11 +21,11 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
 
   const onSubmit: SubmitHandler<VolunteerInputs | OrganizationInputs> = async (data) => {
     const response = await SubmitRegistration({ variant, formData: data });
-    
+
     if (response.success) {
       setMessage(response.message);
       setTimeout(() => {
-        window.location.href = "/login"; // Redirecting to login page
+        window.location.href = "/login";
       }, 2000);
     } else {
       setMessage(response.message);
@@ -74,8 +58,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ variant }) => {
           <Input type="text" placeholder="Organization Name" {...register("nameOfOrganization", { required: "Organization name is required" })} />
           {errors.nameOfOrganization && <ErrorText>{errors.nameOfOrganization.message}</ErrorText>}
 
-          <Input type="text" placeholder="Country" {...register("country", { required: "Country is required" })} />
-          {errors.country && <ErrorText>{errors.country.message}</ErrorText>}
+          <CountryInputField register={register as UseFormRegister<OrganizationInputs>} errors={errors as FieldErrors<OrganizationInputs>} setValue={setValue as UseFormSetValue<OrganizationInputs>} />
 
           <Input type="text" placeholder="City" {...register("city", { required: "City is required" })} />
           {errors.city && <ErrorText>{errors.city.message}</ErrorText>}

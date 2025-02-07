@@ -37,3 +37,6 @@ export const GET_RECOMMENDATION_BY_PREFERENCES = VOLUNTEER + "/get-recommendatio
   */
 export const GET_ALL_ACTIVITIES = API_URL + "/get-all-activities";
 export const GET_ACTIVITY_INFO = API_URL + "/activity-info";
+export const CREATE_ACTIVITY = ORGANIZATION + "/add-activity";
+export const DELETE_ACTIVITY = ORGANIZATION + "/delete-activity";
+export const UPDATE_ACTIVITY = ORGANIZATION + "/update-activity";

@@ -13,6 +13,7 @@ import RegistrationPage from './pages/registration/RegistrationPage';
 import { AppContainer, MainContentContainer } from './styles/GlobalStyledContainers.tsx';
 import AllActivitiesPage from './pages/info/AllActivitiesPage.tsx';
 import ActivityInfoPage from './pages/info/ActivityInfoPage.tsx';
+import ActivityCreationForm from './pages/forms/ActivityCreationForm.tsx';
 
 const App: React.FC = () => {
     return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<AboutProjectPage />} />
                         <Route path="/all-activities" element={<AllActivitiesPage/>}/>
+                        <Route path="/create-activity" element={<ActivityCreationForm/>}/>
                         <Route path="/organizations" element={<AllOrganizationsPage/>}/>
                         <Route path="/organization/:id" element={<OrganizationInfoPage/>}/>
                         <Route path="/activity/:id" element={<ActivityInfoPage/>}/>

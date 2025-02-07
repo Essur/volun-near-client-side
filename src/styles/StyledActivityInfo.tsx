@@ -13,7 +13,11 @@ export const ActivityContainer = styled.div`
 // Left side: Title and description
 export const ActivityDetails = styled.div`
     flex: 2;
-    padding-right: 20px;
+    text-align: left;
+    padding: 0 10px;
+    border-radius: 8px;
+    background-color: var(--components-background);
+    margin-right: 10px;
 `;
 
 export const ActivityTitle = styled.h1`

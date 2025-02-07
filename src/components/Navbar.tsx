@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
+import { useAppNavigation } from "../services/utils/AppNavigation";
+import { getRole } from "../services/utils/RoleService";
 import {
     DropdownContainer,
     DropdownMenu,
@@ -14,8 +15,6 @@ import {
     Username,
 } from "../styles/GlobalStyledComponents";
 import { LinksContainer, NavbarContainer } from "../styles/GlobalStyledContainers";
-import { getRole } from "../services/utils/RoleService";
-import { useAppNavigation } from "../services/utils/AppNavigation";
 
 const Navbar: React.FC = () => {
     const { isLoggedIn, username, logout } = useAuth();

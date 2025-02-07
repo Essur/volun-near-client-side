@@ -7,7 +7,7 @@ import { useAppNavigation } from "../../services/utils/AppNavigation";
 import { addNewPreference, removePreference, removeVolunteerProfile } from "../../services/VolunteerService";
 import { Details, Error, PreferenceList, PreferenceListItem, SimpleButton, Strong, StyledText, SubTitle } from "../../styles/GlobalStyledComponents";
 import { EditModalContainer, ModalContent } from "../../styles/GlobalStyledContainers";
-import VolunteerEditForm from "../edits/VolunteerEditForm";
+import VolunteerEditForm from "../forms/edits/VolunteerEditForm";
 
 const VolunteerProfilePage: React.FC = () => {
     const { profileData, error, updateProfile, fetchProfile } = useProfile();
@@ -49,7 +49,7 @@ const VolunteerProfilePage: React.FC = () => {
     }
 
     useEffect(() => {
-        if (!profileData){
+        if (!profileData) {
             fetchProfile();
         }
     })

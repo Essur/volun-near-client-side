@@ -31,7 +31,7 @@ export const Label = styled.label`
 export const Input = styled.input`
   width: 95%;
   padding: 10px;
-  margin: 3px 0;
+  margin: 10px 0;
   font-size: 16px;
   color: var(--text-color);
   background: var(--dropdown-bg);
@@ -63,6 +63,7 @@ export const Strong = styled.strong`
 
 export const Title = styled.h1`
     margin: 0;
+    margin-bottom: 10px;
     color: var(--text-color);
 `;
 
@@ -279,4 +280,3 @@ export const PreferenceListItem = styled.li`
         color: var(--text-color);
     }
 `;
-

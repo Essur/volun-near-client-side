@@ -82,9 +82,28 @@ export const MoreDetails = styled.a`
   width: 90%;
   font-weight: bold;
   transition: background 0.2s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     color: var(--more-details-text-color-hover);
     background: var(--more-details-button-hover);
+  }
+`;
+
+export const EditButton = styled(MoreDetails)`
+  background-color: var(--button-bg-light);
+  color: var(--button-text-light);
+  border: 1px solid var(--button-border);
+   
+  &:hover {
+    background-color: var(--button-bg-dark);
+    color: var(--button-text-dark);
+  }
+`;
+
+export const RemoveButton = styled(MoreDetails)`
+  background-color:  #ff0000;
+  &:hover {
+    background-color: #b60000;
   }
 `;

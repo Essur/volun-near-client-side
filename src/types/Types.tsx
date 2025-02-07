@@ -25,3 +25,32 @@ export interface OrganizationProfileData {
 export interface ActivityInfo extends Activity{
     organizationId: number;
 }
+
+
+export interface VolunteerInputs {
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    password: string;
+  }
+  
+export interface OrganizationInputs {
+    nameOfOrganization: string;
+    country: string;
+    city: string;
+    address: string;
+    email: string;
+    username: string;
+    password: string;
+  }
+  
+
+export interface ActivityRequest {
+    city: string;
+    country: string;
+    dateOfPlace: string;
+    description: string;
+    title: string;
+    kindOfActivity: string;
+}

@@ -1,18 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useAppNavigation } from "../../services/utils/AppNavigation";
+import { ActivityCard } from "../../components/ActivityCard";
 import ConfirmationModal from "../../components/modal/ConfirmationModalWindow";
-import { Activity } from "../../types/Types";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useProfile } from "../../contexts/ProfileContext";
 import { removeOrganizationProfile } from "../../services/OrganizationService";
-import { formatDate } from "../../services/utils/FormatDateService";
-import { Details, Error, SimpleButton, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag } from "../../styles/GlobalStyledComponents";
-import { EditModalContainer, ModalContent } from "../../styles/GlobalStyledContainers";
-import OrganizationEditForm from "../edits/OrganizationEditForm";
+import { useAppNavigation } from "../../services/utils/AppNavigation";
+import { Details, Error, SimpleButton, Strong, StyledText, SubTitle } from "../../styles/GlobalStyledComponents";
+import { EditModalContainer, ModalContent, ModalOverlay } from "../../styles/GlobalStyledContainers";
+import { EditButton, PageContainer, RemoveButton } from "../../styles/StyledActivitesList";
+import { Activity } from "../../types/Types";
+import { deleteActivity } from "../../services/ActivityService";
+import NotificationModal from "../../components/modal/NotificationModal";
+import OrganizationEditForm from "../forms/edits/OrganizationEditForm";
+import ActivityEditForm from "../forms/edits/ActivityEditForm";
 
 const OrganizationProfilePage: React.FC = () => {
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [notification, setNotification] = useState<{ isOpen: boolean; title: string; message: string }>({
+        isOpen: false,
+        title: "",
+        message: "",
+    });
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [editActivity, setEditActivity] = useState<Activity | null>(null);
+    const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
     const { profileData, error, fetchProfile } = useProfile();
     const auth = useContext(AuthContext);
     const { goTo } = useAppNavigation();
@@ -27,13 +37,22 @@ const OrganizationProfilePage: React.FC = () => {
     }
 
     function addNewActivity(): void {
-
+        goTo("/create-activity");
     }
 
     useEffect(() => {
         if (!profileData)
             fetchProfile();
     })
+
+    async function handleDeleteActviity(id: number): Promise<void> {
+        const response = await deleteActivity(id);
+        setNotification({
+            isOpen: true,
+            title: response === 200 ? "Activity was deleted" : "Failed to delete",
+            message: response === 200 ? "Activity was successfully deleted" : "Something went wrong. Try again.",
+        });
+    }
 
     return (
         <>
@@ -53,22 +72,19 @@ const OrganizationProfilePage: React.FC = () => {
                     {profileData.activities.length > 0 && (
                         <>
                             <SubTitle>Activities</SubTitle>
-                            <StyledList>
+                            <PageContainer>
                                 {profileData.activities.map((activity: Activity) => (
-                                    <StyledListItem key={activity.id}>
-                                        <StyledText><Strong>{activity.title}</Strong></StyledText>
-                                        <StyledText><Strong>Location:</Strong> {activity.city}, {activity.country}</StyledText>
-                                        <StyledText><Strong>Date:</Strong> {formatDate(activity.dateOfPlace)}</StyledText>
-                                        <StyledText>{activity.description}</StyledText>
-                                        <Tag>{activity.kindOfActivity}</Tag>
-                                    </StyledListItem>
+                                    <ActivityCard key={activity.id} activity={activity}>
+                                        <EditButton onClick={() => setEditActivity(activity)}>Edit activity</EditButton>
+                                        <RemoveButton onClick={() => handleDeleteActviity(activity.id)}>Close activity</RemoveButton>
+                                    </ActivityCard>
                                 ))}
-                            </StyledList>
-                            <SimpleButton onClick={addNewActivity}>
-                                Add new activity
-                            </SimpleButton>
+                            </PageContainer>
                         </>
                     )}
+                    <SimpleButton onClick={addNewActivity}>
+                        Add new activity
+                    </SimpleButton>
                     <SimpleButton onClick={() => setIsEditModalOpen(!isEditModalOpen)}>
                         Edit Profile
                     </SimpleButton>
@@ -80,6 +96,15 @@ const OrganizationProfilePage: React.FC = () => {
                 <>Loading profile data...</>
             )}
 
+            <NotificationModal
+                isOpen={notification.isOpen}
+                title={notification.title}
+                message={notification.message}
+                onConfirm={() => {
+                    setNotification({ isOpen: false, title: "", message: "" });
+                    goTo(0);
+                }}
+            />
             <ConfirmationModal
                 isOpen={isConfirmOpen}
                 title="Delete Profile"
@@ -97,6 +122,14 @@ const OrganizationProfilePage: React.FC = () => {
                         />
                     </ModalContent>
                 </EditModalContainer>
+            )}
+
+            {editActivity && (
+                <ModalOverlay>
+                    <ModalContent>
+                        <ActivityEditForm activity={editActivity} onClose={() => setEditActivity(null)}/>
+                    </ModalContent>
+                </ModalOverlay>
             )}
 
         </>

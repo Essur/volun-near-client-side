@@ -1,15 +1,18 @@
 
+import { useAppNavigation } from "../services/utils/AppNavigation";
 import { formatDate } from "../services/utils/FormatDateService";
-import { Card, Category, Title, Location, Description, MoreDetails } from "../styles/StyledActivitesList";
+import { Card, Category, Date, Description, Location, MoreDetails, Title } from "../styles/StyledActivitesList";
 import { Activity } from "../types/Types";
-import { useNavigate } from "react-router-dom";
 
-export const ActivityCard: React.FC<{ activity: Activity }> = ({ activity }) => {
-    const navigate = useNavigate();
+export const ActivityCard: React.FC<{ activity: Activity; children?: React.ReactNode }> = ({
+    activity,
+    children
+}) => {
+    const { goToWithId } = useAppNavigation();
 
     const getActivityInfo = (id: number) => {
         console.log(`Activity ID: ${id}`);
-        navigate(`/activity/${id}`)
+        goToWithId("/activity", id);
     }
 
     return (
@@ -17,9 +20,10 @@ export const ActivityCard: React.FC<{ activity: Activity }> = ({ activity }) => 
             <Title>{activity.title}</Title>
             <Category>{activity.kindOfActivity}</Category>
             <Location>📍 {activity.city}, {activity.country}</Location>
-            <Date>📅 { formatDate(activity.dateOfPlace) }</Date>
+            <Date>📅 {formatDate(activity.dateOfPlace)}</Date>
             <Description>{activity.description}</Description>
             <MoreDetails onClick={() => getActivityInfo(activity.id)}>More details ↗</MoreDetails>
+            {children}
         </Card>
     );
 };

@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { OrganizationProfileData } from "../../types/Types";
+import { ActivityCard } from "../../components/ActivityCard";
 import { getOrganizationInfo } from "../../services/OrganizationService";
-import { Details, Loading, Strong, StyledList, StyledListItem, StyledText, SubTitle, Tag, Title } from "../../styles/GlobalStyledComponents";
-import { formatDate } from "../../services/utils/FormatDateService";
-import { useAppNavigation } from "../../services/utils/AppNavigation";
-import { MoreDetails } from "../../styles/StyledActivitesList";
+import { Details, Loading, Strong, StyledText, SubTitle, Title } from "../../styles/GlobalStyledComponents";
+import { PageContainer } from "../../styles/StyledActivitesList";
+import { Activity, OrganizationProfileData } from "../../types/Types";
 
 const OrganizationInfoPage: React.FC = () => {
     const { id } = useParams();
-    const { goToWithId } = useAppNavigation();
     const [organization, setOrganization] = useState<OrganizationProfileData | null>(null);
 
     useEffect(() => {
@@ -38,18 +36,11 @@ const OrganizationInfoPage: React.FC = () => {
             {organization.activities.length > 0 && (
                 <>
                     <SubTitle>Activities</SubTitle>
-                    <StyledList>
-                        {organization.activities.map((activity) => (
-                            <StyledListItem key={activity.id}>
-                                <h3>{activity.title}</h3>
-                                <StyledText><Strong>Location:</Strong> {activity.city}, {activity.country}</StyledText>
-                                <StyledText><Strong>Date:</Strong> {formatDate(activity.dateOfPlace)}</StyledText>
-                                <StyledText>{activity.description}</StyledText>
-                                <Tag>{activity.kindOfActivity}</Tag>
-                                <MoreDetails onClick={() => goToWithId("/activity", activity.id)}>Details</MoreDetails>
-                            </StyledListItem>
+                    <PageContainer>
+                        {organization.activities.map((activity: Activity) => (
+                            <ActivityCard key={activity.id} activity={activity} />
                         ))}
-                    </StyledList>
+                    </PageContainer>
                 </>
             )}
         </>

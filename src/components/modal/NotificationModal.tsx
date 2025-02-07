@@ -1,16 +1,15 @@
 import React from "react";
-import { CancelButton, SimpleButton, StyledText, ThirdTitle } from "../../styles/GlobalStyledComponents";
+import { SimpleButton, StyledText, ThirdTitle } from "../../styles/GlobalStyledComponents";
 import { ModalContent, ModalOverlay } from "../../styles/GlobalStyledContainers";
 
-interface ConfirmationModalProps {
+interface NotificationModalProps {
     isOpen: boolean;
     title?: string;
     message: string;
     onConfirm: () => void;
-    onCancel: () => void;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title = "Confirm Action", message, onConfirm, onCancel}) => {
+const NotificationModal: React.FC<NotificationModalProps> = ({ isOpen, title = "Confirm Action", message, onConfirm }) => {
     if (!isOpen) return null;
 
     return (
@@ -19,12 +18,11 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title = "
                 <ThirdTitle>{title}</ThirdTitle>
                 <StyledText>{message}</StyledText>
                 <>
-                    <SimpleButton onClick={onConfirm}>Yes</SimpleButton>
-                    <CancelButton onClick={onCancel}>Cancel</CancelButton>
+                    <SimpleButton onClick={onConfirm}>OK</SimpleButton>
                 </>
             </ModalContent>
         </ModalOverlay>
     );
 };
 
-export default ConfirmationModal;
+export default NotificationModal;

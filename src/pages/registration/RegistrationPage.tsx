@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
-import RegistrationForm, { Variant } from "../registration/RegistrationForm";
+import RegistrationForm, { Variant } from "../forms/RegistrationForm";
 
 export default function RegistrationPage() {
   const [variant, setVariant] = useState<Variant>("volunteer");

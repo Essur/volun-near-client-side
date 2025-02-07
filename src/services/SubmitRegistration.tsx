@@ -1,5 +1,5 @@
 import { REGISTER_ORGANIZATION, REGISTER_VOLUNTEER } from "../config/ApiRoutes";
-import { Variant } from "../pages/registration/RegistrationForm";
+import { Variant } from "../pages/forms/RegistrationForm";
 
 // services/SubmitRegistration.ts
 interface SubmitRegistrationProps {

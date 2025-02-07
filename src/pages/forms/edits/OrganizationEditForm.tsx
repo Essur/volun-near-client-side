@@ -1,8 +1,9 @@
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAppNavigation } from "../../services/utils/AppNavigation";
-import { updateOrganizationProfile } from "../../services/OrganizationService";
-import { Error, FormContainer, Input, Label, SimpleButton, SubTitle } from "../../styles/GlobalStyledComponents";
+import { updateOrganizationProfile } from "../../../services/OrganizationService";
+import { useAppNavigation } from "../../../services/utils/AppNavigation";
+import { FormContainer, SubTitle, Label, Input, SimpleButton, Error } from "../../../styles/GlobalStyledComponents";
+
 
 interface OrganizationEditFormProps {
     profileData: {
