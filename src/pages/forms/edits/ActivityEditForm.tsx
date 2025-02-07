@@ -45,7 +45,6 @@ const ActivityEditForm: React.FC<ActivityFormProps> = ({ activity, onClose }) =>
             const response = await updateActivityInfo(formData, activity.id);
             if (response == 200){
                 setIsUpdated(true);
-                onClose();
             } else {
                 setIsUpdated(false);
                 onClose();
@@ -104,8 +103,9 @@ const ActivityEditForm: React.FC<ActivityFormProps> = ({ activity, onClose }) =>
                     title="Activity was updated"
                     message={"Actviity with title " + activity.title + " was updated ✅️"}
                     onConfirm={() => {
-                        setIsUpdated(false);
-                        goTo(0);
+                            setIsUpdated(false);
+                            onClose();
+                            goTo(0);
                     }}
                 />
         </>

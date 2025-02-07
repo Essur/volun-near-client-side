@@ -112,6 +112,7 @@ const OrganizationProfilePage: React.FC = () => {
                 onConfirm={removeProfile}
                 onCancel={() => setIsConfirmOpen(false)}
             />
+            
 
             {isEditModalOpen && (
                 <EditModalContainer>
@@ -127,7 +128,7 @@ const OrganizationProfilePage: React.FC = () => {
             {editActivity && (
                 <ModalOverlay>
                     <ModalContent>
-                        <ActivityEditForm activity={editActivity} onClose={() => setEditActivity(null)}/>
+                        <ActivityEditForm activity={editActivity} onClose={() => setEditActivity(null)} />
                     </ModalContent>
                 </ModalOverlay>
             )}
