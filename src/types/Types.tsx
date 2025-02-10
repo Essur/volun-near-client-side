@@ -22,8 +22,12 @@ export interface OrganizationProfileData {
     activities: Activity[];
 }
 
-export interface ActivityInfo extends Activity{
+export interface ActivityInfo extends Activity {
     organizationId: number;
+}
+
+export interface VolunteerActivityRequestStatus {
+    requestStatus: string;
 }
 
 
@@ -33,8 +37,8 @@ export interface VolunteerInputs {
     email: string;
     username: string;
     password: string;
-  }
-  
+}
+
 export interface OrganizationInputs {
     nameOfOrganization: string;
     country: string;
@@ -43,8 +47,8 @@ export interface OrganizationInputs {
     email: string;
     username: string;
     password: string;
-  }
-  
+}
+
 
 export interface ActivityRequest {
     city: string;

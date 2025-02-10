@@ -25,18 +25,20 @@ export const GET_INFO_ABOUT_ORGANIZATION = ORGANIZATION + "/get-activities";
  * Volunteers routes
  */
 export const GET_VOLUNTEER_PROFILE = VOLUNTEER + "/my-profile";
-export const JOIN_TO_ACTIVITY = VOLUNTEER + "/join-to-activity";
+export const JOIN_TO_ACTIVITY_REQUEST = VOLUNTEER + "/join-to-activity";
 export const DELETE_VOLUNTEER_PROFILE = VOLUNTEER + "/delete_profile";
 export const DELETE_PREFERENCE_BY_ID = VOLUNTEER + "/delete-preference";
 export const SET_VOLUNTEERS_PREFERENCES = VOLUNTEER + "/set-preferences";
 export const LEAVE_FROM_ACTIVITY_BY_VOLUNTEER = VOLUNTEER + "/leave-activity";
 export const GET_RECOMMENDATION_BY_PREFERENCES = VOLUNTEER + "/get-recommendations";
 
- /**
-  * Activity routes
-  */
-export const GET_ALL_ACTIVITIES = API_URL + "/get-all-activities";
+/**
+ * Activity routes
+ */
 export const GET_ACTIVITY_INFO = API_URL + "/activity-info";
 export const CREATE_ACTIVITY = ORGANIZATION + "/add-activity";
 export const DELETE_ACTIVITY = ORGANIZATION + "/delete-activity";
 export const UPDATE_ACTIVITY = ORGANIZATION + "/update-activity";
+export const GET_ALL_ACTIVITIES = API_URL + "/get-all-activities";
+export const GET_ACTIVITY_INFO_WITH_VOLUNTEER_REQUEST_STATUS = API_URL + "/activity-request-status";
+export const CANCEL_VOLUNTEER_ACTIVITY_REQUEST = VOLUNTEER + "/delete-my-activity-request"

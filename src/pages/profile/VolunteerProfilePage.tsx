@@ -66,22 +66,9 @@ const VolunteerProfilePage: React.FC = () => {
                         <StyledText><Strong>Username:</Strong> {profileData.username}</StyledText>
                         <StyledText><Strong>First Name:</Strong> {profileData.firstName}</StyledText>
                         <StyledText><Strong>Last Name:</Strong> {profileData.lastName}</StyledText>
-                        <StyledText><Strong>Preferences:</Strong></StyledText>
-                        <PreferenceList>
-                            {profileData.preferences.map((preference: { preferenceId: number; preferenceName: string }) => (
-                                <PreferenceListItem key={preference.preferenceId}>
-                                    {preference.preferenceName}
-                                    <SimpleButton
-                                        onClick={() => handleRemovePreference(preference.preferenceId)}
-                                    >
-                                        Remove
-                                    </SimpleButton>
-                                </PreferenceListItem>
-                            ))}
-                        </PreferenceList>
-                        <SimpleButton onClick={() => setShowMenu(!showMenu)}>
-                            Manage Preferences
-                        </SimpleButton>
+                        {/* <SimpleButton onClick={() => setShowMenu(!showMenu)}> */}
+                        {/*     Manage Preferences */}
+                        {/* </SimpleButton> */}
                         <SimpleButton onClick={() => setIsEditModalOpen(true)}>
                             Edit Profile
                         </SimpleButton>
@@ -103,13 +90,13 @@ const VolunteerProfilePage: React.FC = () => {
                 onCancel={() => setIsConfirmOpen(false)}
             />
 
-            <AddPreferenceModal
-                isOpen={showMenu}
-                newPreference={newPreference}
-                setNewPreference={setNewPreference}
-                onAdd={handleAddPreference}
-                onClose={() => setShowMenu(false)}
-            />
+            {/* <AddPreferenceModal */}
+            {/*     isOpen={showMenu} */}
+            {/*     newPreference={newPreference} */}
+            {/*     setNewPreference={setNewPreference} */}
+            {/*     onAdd={handleAddPreference} */}
+            {/*     onClose={() => setShowMenu(false)} */}
+            {/* /> */}
 
             {isEditModalOpen && (
                 <EditModalContainer>
