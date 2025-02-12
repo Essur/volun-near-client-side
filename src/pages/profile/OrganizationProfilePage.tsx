@@ -112,7 +112,6 @@ const OrganizationProfilePage: React.FC = () => {
                 onConfirm={removeProfile}
                 onCancel={() => setIsConfirmOpen(false)}
             />
-            
 
             {isEditModalOpen && (
                 <EditModalContainer>

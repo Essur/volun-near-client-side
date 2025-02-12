@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import NotificationModal from "../../components/modal/NotificationModal";
-import { cancelVolunteerActivityRequest, getActivityInfo, getVolunteerActivityRequestStatus, joinVolunteerActivityRequest } from "../../services/ActivityService";
+import { getActivityInfo} from "../../services/ActivityService";
 import { useAppNavigation } from "../../services/utils/AppNavigation";
 import { formatDate } from "../../services/utils/FormatDateService";
 import { getRole } from "../../services/utils/RoleService";
@@ -9,9 +9,10 @@ import { Loading, Tag } from "../../styles/GlobalStyledComponents";
 import { MoreDetails, RemoveButton } from "../../styles/StyledActivitesList";
 import { ActivityContainer, ActivityDescription, ActivityDetails, ActivityTitle, InfoItem, InfoLink, InfoText, InfoTitle, StyledActivityInfo } from "../../styles/StyledActivityInfo";
 import { ActivityInfo } from "../../types/Types";
+import { getVolunteerActivityRequestStatus, joinVolunteerActivityRequest, cancelVolunteerActivityRequest, leaveActivityByVolunteer } from "../../services/ActivityReqeustService";
 
 const ActivityInfoPage: React.FC = () => {
-    const [isStatusPresent, setIsStatusPresent] = useState<string | boolean |null>(false);
+    const [isStatusPresent, setIsStatusPresent] = useState<string | boolean | null>(false);
     const [notification, setNotification] = useState<{ isOpen: boolean; title: string; message: string }>({
         isOpen: false,
         title: "",
@@ -26,9 +27,9 @@ const ActivityInfoPage: React.FC = () => {
             const data = await getActivityInfo(Number(id));
             if (getRole() === "volunteer") {
                 const response = await getVolunteerActivityRequestStatus(Number(id));
-                if (response?.requestStatus === "PENDING" ) {
-                   setIsStatusPresent("PENDING")
-                } else if ( response?.requestStatus === "APPROVED") {
+                if (response?.requestStatus === "PENDING") {
+                    setIsStatusPresent("PENDING")
+                } else if (response?.requestStatus === "APPROVED") {
                     setIsStatusPresent("APPROVED");
                 } else {
                     setIsStatusPresent(false);
@@ -64,6 +65,15 @@ const ActivityInfoPage: React.FC = () => {
                 message: "Request was successfully removed!"
             })
         }
+    }
+
+    async function leaveActivity(activityId: number, activityName: string): Promise<void> {
+        const response = await leaveActivityByVolunteer(activityId);
+        setNotification({
+            isOpen: true,
+            title: response === 200 ? "You've left the activity" : "You have not left the activity",
+            message: response === 200 ? "You have successfully left from \"" + activityName + "\"" : "Error happened, you have not left from activity, try re-login"
+        })
     }
 
     return (
@@ -107,15 +117,22 @@ const ActivityInfoPage: React.FC = () => {
                         <InfoTitle>📅 Date</InfoTitle>
                         <InfoText>{formatDate(activity.dateOfPlace)}</InfoText>
                     </InfoItem>
+
                     {getRole() === "volunteer" && isStatusPresent === false && <InfoItem>
                         <MoreDetails onClick={() => joinToActivityRequest(activity.id)}>Join activity</MoreDetails>
                     </InfoItem>}
-                    {getRole() === "volunteer" && isStatusPresent === "PENDING" && <InfoItem>
-                        <RemoveButton onClick={() => cancelActivityRequest(activity.id)}>Cancel my request</RemoveButton>
-                    </InfoItem>}
+
                     <InfoItem>
                         <MoreDetails onClick={() => goToWithId("/organization", activity.organizationId)}>Go to organization</MoreDetails>
                     </InfoItem>
+
+                    {getRole() === "volunteer" && isStatusPresent === "PENDING" && <InfoItem>
+                        <RemoveButton onClick={() => cancelActivityRequest(activity.id)}>Cancel my request</RemoveButton>
+                    </InfoItem>}
+
+                    {getRole() === "volunteer" && isStatusPresent === "APPROVED" && <InfoItem>
+                        <RemoveButton onClick={() => leaveActivity(activity.id, activity.title)}>Leave activity</RemoveButton>
+                    </InfoItem>}
                 </StyledActivityInfo>
             </ActivityContainer>
 

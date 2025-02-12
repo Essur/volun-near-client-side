@@ -14,6 +14,8 @@ import { AppContainer, MainContentContainer } from './styles/GlobalStyledContain
 import AllActivitiesPage from './pages/info/AllActivitiesPage.tsx';
 import ActivityInfoPage from './pages/info/ActivityInfoPage.tsx';
 import ActivityCreationForm from './pages/forms/ActivityCreationForm.tsx';
+import RequestsForOrganization from './pages/info/RequestsForOrganizationPage.tsx';
+import VolunteerRequestsPage from './pages/info/VolunteerRequestsPage.tsx';
 
 const App: React.FC = () => {
     return (
@@ -28,6 +30,8 @@ const App: React.FC = () => {
                         <Route path="/create-activity" element={<ActivityCreationForm/>}/>
                         <Route path="/organizations" element={<AllOrganizationsPage/>}/>
                         <Route path="/organization/:id" element={<OrganizationInfoPage/>}/>
+                        <Route path="/organization-requests" element={<RequestsForOrganization/>}/>
+                        <Route path="/volunteer-requests" element={<VolunteerRequestsPage/>}/>
                         <Route path="/activity/:id" element={<ActivityInfoPage/>}/>
                         <Route path="/volunteer-profile" element={<VolunteerProfilePage />} />
                         <Route path="/organization-profile" element={<OrganizationProfilePage />} />

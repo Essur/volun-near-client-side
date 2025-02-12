@@ -64,6 +64,13 @@ const Navbar: React.FC = () => {
                                 }>
                                     View Profile
                                 </MenuItem>
+                                <MenuItem onClick={() =>
+                                    sRole === "volunteer"
+                                        ? goTo("/volunteer-requests")
+                                        : goTo("/organization-requests")
+                                }>
+                                    My requests
+                                </MenuItem>
                                 {sRole === "organization" && (
                                     <MenuItem>
                                         My activities

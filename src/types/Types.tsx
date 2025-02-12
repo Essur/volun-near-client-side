@@ -30,6 +30,24 @@ export interface VolunteerActivityRequestStatus {
     requestStatus: string;
 }
 
+export interface VolunteerInfo {
+    email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+}
+
+// Activity request info for volunteer
+export interface VolunteerActivityRequestForVolunteer {
+    requestId: number;
+    activityId: number;
+    activityName: string;
+}
+
+// Activity request info for organization
+export interface VolunteerRequestForOrganization extends VolunteerActivityRequestForVolunteer {
+    volunteerInfo: VolunteerInfo;
+}
 
 export interface VolunteerInputs {
     firstName: string;

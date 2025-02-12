@@ -20,6 +20,8 @@ export const GET_ALL_ORGANIZATIONS = ORGANIZATION + "/get-all";
 export const GET_ORGANIZATION_PROFILE = ORGANIZATION + "/my-profile";
 export const DELETE_ORGANIZATION_PROFILE = ORGANIZATION + "/delete-profile";
 export const GET_INFO_ABOUT_ORGANIZATION = ORGANIZATION + "/get-activities";
+export const GET_REQUESTS_FOR_ORGANIZATION = ORGANIZATION + "/my-requests";
+export const APPROVE_REQUEST = ORGANIZATION + "/approve-volunteer";
 
 /**
  * Volunteers routes
@@ -31,6 +33,7 @@ export const DELETE_PREFERENCE_BY_ID = VOLUNTEER + "/delete-preference";
 export const SET_VOLUNTEERS_PREFERENCES = VOLUNTEER + "/set-preferences";
 export const LEAVE_FROM_ACTIVITY_BY_VOLUNTEER = VOLUNTEER + "/leave-activity";
 export const GET_RECOMMENDATION_BY_PREFERENCES = VOLUNTEER + "/get-recommendations";
+export const GET_REQUESTS_FOR_VOLUNTEER = VOLUNTEER + "/my-requests";
 
 /**
  * Activity routes
