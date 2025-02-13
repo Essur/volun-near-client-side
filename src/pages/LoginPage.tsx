@@ -5,7 +5,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { loginUser } from "../services/AuthService";
 import { Error, FormContainer, Input, SimpleButton, SubTitle } from "../styles/GlobalStyledComponents";
 
-
 interface LoginInputs {
     username: string;
     password: string;

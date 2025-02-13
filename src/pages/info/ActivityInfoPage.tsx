@@ -10,6 +10,7 @@ import { MoreDetails, RemoveButton } from "../../styles/StyledActivitesList";
 import { ActivityContainer, ActivityDescription, ActivityDetails, ActivityTitle, InfoItem, InfoLink, InfoText, InfoTitle, StyledActivityInfo } from "../../styles/StyledActivityInfo";
 import { ActivityInfo } from "../../types/Types";
 import { getVolunteerActivityRequestStatus, joinVolunteerActivityRequest, cancelVolunteerActivityRequest, leaveActivityByVolunteer } from "../../services/ActivityReqeustService";
+import { getOrganizationId } from "../../services/AuthService";
 
 const ActivityInfoPage: React.FC = () => {
     const [isStatusPresent, setIsStatusPresent] = useState<string | boolean | null>(false);
@@ -20,6 +21,7 @@ const ActivityInfoPage: React.FC = () => {
     });
     const [activity, setActivity] = useState<ActivityInfo | null>();
     const { goToWithId, goTo } = useAppNavigation();
+    const [orgId, setOrgId] = useState<Number | null>(null);
     const { id } = useParams();
 
     useEffect(() => {
@@ -34,6 +36,10 @@ const ActivityInfoPage: React.FC = () => {
                 } else {
                     setIsStatusPresent(false);
                 }
+            }
+            if (getRole() === "organization" || orgId === null) {
+                await getOrganizationId();
+                setOrgId(Number(localStorage.getItem("orgId")));
             }
             if (data) {
                 setActivity(data);
@@ -74,6 +80,10 @@ const ActivityInfoPage: React.FC = () => {
             title: response === 200 ? "You've left the activity" : "You have not left the activity",
             message: response === 200 ? "You have successfully left from \"" + activityName + "\"" : "Error happened, you have not left from activity, try re-login"
         })
+    }
+
+    function manageMyActivity(id: number): void {
+        throw new Error("Function not implemented.");
     }
 
     return (
@@ -132,6 +142,10 @@ const ActivityInfoPage: React.FC = () => {
 
                     {getRole() === "volunteer" && isStatusPresent === "APPROVED" && <InfoItem>
                         <RemoveButton onClick={() => leaveActivity(activity.id, activity.title)}>Leave activity</RemoveButton>
+                    </InfoItem>}
+
+                    {getRole() === "organization" && orgId === activity.organizationId && <InfoItem>
+                        <MoreDetails onClick={() => manageMyActivity(activity.id)}>Manage my activity</MoreDetails>
                     </InfoItem>}
                 </StyledActivityInfo>
             </ActivityContainer>

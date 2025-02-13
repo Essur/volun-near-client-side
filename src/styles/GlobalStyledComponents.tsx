@@ -210,6 +210,7 @@ export const OrganizationItem = styled.li`
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: background-color 0.2s ease, color 0.2s ease;
+    cursor: pointer;
     &:hover {
         background-color: var(--organization-list-item-bg-hover);
     }

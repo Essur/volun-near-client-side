@@ -16,6 +16,7 @@ export const UPDATE_ORGANIZATION_PROFILE = API_URL + "/update/organization";
 /**
  * Organization routes
  */
+export const GET_ORGANIZATION_ID = ORGANIZATION + "/my-id";
 export const GET_ALL_ORGANIZATIONS = ORGANIZATION + "/get-all";
 export const GET_ORGANIZATION_PROFILE = ORGANIZATION + "/my-profile";
 export const DELETE_ORGANIZATION_PROFILE = ORGANIZATION + "/delete-profile";
