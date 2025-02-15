@@ -82,8 +82,8 @@ const ActivityInfoPage: React.FC = () => {
         })
     }
 
-    function manageMyActivity(id: number): void {
-        throw new Error("Function not implemented.");
+    function manageMyActivity(activityId: number): void {
+        goToWithId("/activity/managment", activityId);
     }
 
     return (

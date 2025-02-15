@@ -1,5 +1,5 @@
-import { CREATE_ACTIVITY, DELETE_ACTIVITY, GET_ACTIVITY_INFO, GET_ALL_ACTIVITIES, UPDATE_ACTIVITY } from "../config/ApiRoutes";
-import { Activity, ActivityInfo, ActivityRequest } from "../types/Types";
+import { CREATE_ACTIVITY, DELETE_ACTIVITY, GET_ACTIVITY_INFO, GET_ALL_ACTIVITIES, GET_VOLUNTEERS_FROM_CURRENT_ACTIVITY, KICK_VOLUNTEER_FROM_ACTIVITY, UPDATE_ACTIVITY } from "../config/ApiRoutes";
+import { Activity, ActivityInfo, ActivityRequest, VolunteerInActivityInfo } from "../types/Types";
 
 const HEADERS = {
     "Content-Type": "application/json",
@@ -91,3 +91,37 @@ export const deleteActivity = async (id: number) => {
         return null;
     }
 };
+
+export const getVolunteersForActivty = async (id: number): Promise<VolunteerInActivityInfo[] | null> => {
+    try {
+        const response = await fetch(GET_VOLUNTEERS_FROM_CURRENT_ACTIVITY + `?activityId=${id}`, {
+            method: "GET",
+            headers: HEADERS
+        })
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error("No volunteers in activity with id: " + id);
+        }
+    } catch (err: any) {
+        console.error(err);
+        return null;
+    }
+};
+
+export const kickVolunteerFromActivity = async (username: string, activityId: number): Promise<Number | null> => {
+    try {
+        const response = await fetch(KICK_VOLUNTEER_FROM_ACTIVITY + `?volunteerUsername=${username}&` + `activityId=${activityId}`, {
+            method: "DELETE",
+            headers: HEADERS
+        })
+        if (response.ok) {
+            return response.status;
+        } else {
+            throw new Error("Fail! Volunteer was not kicked from activity!");
+        }
+    } catch (err: any) {
+        console.error(err);
+        return null;
+    }
+}

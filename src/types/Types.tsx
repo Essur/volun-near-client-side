@@ -37,6 +37,10 @@ export interface VolunteerInfo {
     lastName: string;
 }
 
+export interface VolunteerInActivityInfo extends VolunteerInfo{
+    acceptedDate: string;
+}
+
 // Activity request info for volunteer
 export interface VolunteerActivityRequestForVolunteer {
     requestId: number;
