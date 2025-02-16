@@ -17,7 +17,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [username, setUsername] = useState<string | null>(localStorage.getItem("username"));
     const [role, setRole] = useState<string | null>(localStorage.getItem("role"));
 
-    const login = (username: string, token: string, refreshToken: string, role: string, expiresIn: number) => {
+    const login = async (username: string, token: string, refreshToken: string, role: string, expiresIn: number) => {
         const expiryTime = Date.now() + expiresIn * 1000;
 
         localStorage.setItem("jwtToken", token);

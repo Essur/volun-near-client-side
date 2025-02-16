@@ -37,7 +37,7 @@ const ActivityInfoPage: React.FC = () => {
                     setIsStatusPresent(false);
                 }
             }
-            if (getRole() === "organization" || orgId === null) {
+            if (getRole() === "organization" || orgId === null && getRole() != "volunteer") {
                 await getOrganizationId();
                 setOrgId(Number(localStorage.getItem("orgId")));
             }

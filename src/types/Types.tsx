@@ -80,3 +80,11 @@ export interface ActivityRequest {
     title: string;
     kindOfActivity: string;
 }
+
+export interface FeedbackInfo {
+    id: number,
+    rate: number,
+    description: string,
+    realNameOfUser: string,
+    username: string
+}

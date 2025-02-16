@@ -20,7 +20,7 @@ export const GET_ORGANIZATION_ID = ORGANIZATION + "/my-id";
 export const GET_ALL_ORGANIZATIONS = ORGANIZATION + "/get-all";
 export const GET_ORGANIZATION_PROFILE = ORGANIZATION + "/my-profile";
 export const DELETE_ORGANIZATION_PROFILE = ORGANIZATION + "/delete-profile";
-export const GET_INFO_ABOUT_ORGANIZATION = ORGANIZATION + "/get-activities";
+export const GET_ACTIVITY_OF_CURRENT_ORGANIZATION = ORGANIZATION + "/get-activities";
 export const GET_REQUESTS_FOR_ORGANIZATION = ORGANIZATION + "/my-requests";
 export const APPROVE_REQUEST = ORGANIZATION + "/approve-volunteer";
 export const KICK_VOLUNTEER_FROM_ACTIVITY = ORGANIZATION + "/kick-volunteer";
@@ -50,3 +50,10 @@ export const UPDATE_ACTIVITY = ORGANIZATION + "/update-activity";
 export const GET_ALL_ACTIVITIES = API_URL + "/get-all-activities";
 export const GET_ACTIVITY_INFO_WITH_VOLUNTEER_REQUEST_STATUS = API_URL + "/activity-request-status";
 export const CANCEL_VOLUNTEER_ACTIVITY_REQUEST = VOLUNTEER + "/delete-my-activity-request"
+
+/**
+ * Feedbacks routes
+ */
+
+const FEEDBACK = API_URL + "/feedback";
+export const GET_FEEDBACKS_FROM_CURRENT_ORGANIZATION = FEEDBACK + "/feedbacks-of-organization";

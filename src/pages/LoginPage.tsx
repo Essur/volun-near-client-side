@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { loginUser } from "../services/AuthService";
+import { useAppNavigation } from "../services/utils/AppNavigation";
 import { Error, FormContainer, Input, SimpleButton, SubTitle } from "../styles/GlobalStyledComponents";
 
 interface LoginInputs {
@@ -13,7 +13,7 @@ interface LoginInputs {
 const LoginPage: React.FC = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>();
     const [loginError, setLoginError] = useState<string | null>();
-    const navigate = useNavigate();
+    const { goTo } = useAppNavigation();
     const expiryTime = 3600000;
     const { login } = useAuth();
 
@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
             const data = await loginUser(username, password);
             login(username, data.token, data.refreshToken, data.role, expiryTime);
             setLoginError(null);
-            navigate("/");
+            goTo("/");
         } catch {
             setLoginError("Wrong username or password!");
         }

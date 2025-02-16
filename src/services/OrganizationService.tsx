@@ -1,5 +1,5 @@
+import { DELETE_ORGANIZATION_PROFILE, GET_ACTIVITY_OF_CURRENT_ORGANIZATION, GET_ALL_ORGANIZATIONS, UPDATE_ORGANIZATION_PROFILE } from "../config/ApiRoutes";
 import { OrganizationProfileData, OrganizationResponseDTO } from "../types/Types";
-import { DELETE_ORGANIZATION_PROFILE, GET_ALL_ORGANIZATIONS, GET_INFO_ABOUT_ORGANIZATION, UPDATE_ORGANIZATION_PROFILE } from "../config/ApiRoutes";
 
 export const updateOrganizationProfile = async (formData: { nameOfOrganization: string, country: string, city: string, address: string, email: string }) => {
   try {
@@ -40,7 +40,7 @@ export const getAllOrganizations = async (): Promise<OrganizationResponseDTO[]> 
 
 export const getOrganizationInfo = async (id: number): Promise<OrganizationProfileData | null> => {
   try {
-    const response = await fetch(GET_INFO_ABOUT_ORGANIZATION + `?id=${id}`, {
+    const response = await fetch(GET_ACTIVITY_OF_CURRENT_ORGANIZATION + `?organizationId=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
