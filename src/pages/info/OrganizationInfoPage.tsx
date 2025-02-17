@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ActivityCard } from "../../components/ActivityCard";
+import FeedbackList from "../../components/FeedbackList";
 import { getOrganizationInfo } from "../../services/OrganizationService";
-import { Details, Loading, SimpleButton, Strong, StyledText, SubTitle, Title } from "../../styles/GlobalStyledComponents";
+import { Details, Loading, Strong, StyledText, SubTitle, Title } from "../../styles/GlobalStyledComponents";
+import { MainContentContainer } from "../../styles/GlobalStyledContainers";
 import { PageContainer } from "../../styles/StyledActivitesList";
 import { Activity, OrganizationProfileData } from "../../types/Types";
-import { MainContentContainer } from "../../styles/GlobalStyledContainers";
-import FeedbackList from "../../components/FeedbackList";
-import { getRole } from "../../services/utils/RoleService";
 
 const OrganizationInfoPage: React.FC = () => {
     const { id } = useParams();
@@ -25,6 +24,7 @@ const OrganizationInfoPage: React.FC = () => {
     }, [id]);
 
     if (!organization) return <Loading>Loading...</Loading>;
+
 
     return (
         <>
@@ -51,9 +51,8 @@ const OrganizationInfoPage: React.FC = () => {
 
             <>
                 <SubTitle>Feedbacks</SubTitle>
-                <FeedbackList organizationId={organization.organizationResponseDTO.id}/>
-                { getRole() === "volunteer" &&
-                    <SimpleButton>Add feedback</SimpleButton> }
+                <FeedbackList organizationId={organization.organizationResponseDTO.id} />
+
             </>
         </>
     );

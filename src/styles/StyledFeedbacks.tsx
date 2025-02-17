@@ -53,7 +53,72 @@ export const AverageRating = styled.div`
     gap: 5px;
 `;
 
-export const StarRating = styled.div`
+export const StarRatingContainer = styled.div`
     font-size: 20px;
     color: #FFD700;
+    text-align: left;
+`;
+
+
+export const FeedbackFormContainer = styled.form`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    max-width: 95%;
+    margin: 0 20px;
+`;
+
+export const FeedbackInput = styled.textarea`
+    width: 98%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    font-size: 16px;
+    min-height: 150px;
+`;
+
+export const RatingContainer = styled.div`
+    display: flex;
+    gap: 5px;
+    font-size: 24px;
+    color: #FFD700;
+    cursor: pointer;
+`;
+
+export const SubmitButton = styled.button`
+    padding: 10px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
+
+export const Actions = styled.div`
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+`;
+
+export const FeedbackDescription = styled.p`
+  font-size: 16px;
+  color: var(--text-color);
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  text-align: left;
 `;

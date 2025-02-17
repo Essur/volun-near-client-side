@@ -56,4 +56,7 @@ export const CANCEL_VOLUNTEER_ACTIVITY_REQUEST = VOLUNTEER + "/delete-my-activit
  */
 
 const FEEDBACK = API_URL + "/feedback";
+export const POST_FEEDBACK_ABOUT_ORGANIZATION = FEEDBACK + "/give-feedback";
 export const GET_FEEDBACKS_FROM_CURRENT_ORGANIZATION = FEEDBACK + "/feedbacks-of-organization";
+export const UPDATE_FEEDBACK_FOR_CURRENT_ORGANIZATION = FEEDBACK + "/update-feedback";
+export const DELETE_FEEDBACK_ABOUT_ORGANIZATION = FEEDBACK + "/remove-feedback";

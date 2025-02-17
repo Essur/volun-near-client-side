@@ -9,7 +9,7 @@ export const AppContainer = styled.div`
 
 export const MainContentContainer = styled.div`
     flex-grow: 1;
-    width: 100%;
+    width: 95%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
