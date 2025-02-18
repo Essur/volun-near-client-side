@@ -1,5 +1,5 @@
 import React from "react";
-import { CancelButton, SimpleButton, StyledText, ThirdTitle } from "../../styles/GlobalStyledComponents";
+import { SimpleButton, StyledText, ThirdTitle } from "../../styles/GlobalStyledComponents";
 import { ModalContent, ModalOverlay } from "../../styles/GlobalStyledContainers";
 
 interface ConfirmationModalProps {
@@ -10,7 +10,7 @@ interface ConfirmationModalProps {
     onCancel: () => void;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title = "Confirm Action", message, onConfirm, onCancel}) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title = "Confirm Action", message, onConfirm, onCancel }) => {
     if (!isOpen) return null;
 
     return (
@@ -20,7 +20,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, title = "
                 <StyledText>{message}</StyledText>
                 <>
                     <SimpleButton onClick={onConfirm}>Yes</SimpleButton>
-                    <CancelButton onClick={onCancel}>Cancel</CancelButton>
+                    <SimpleButton onClick={onCancel}>Cancel</SimpleButton>
                 </>
             </ModalContent>
         </ModalOverlay>

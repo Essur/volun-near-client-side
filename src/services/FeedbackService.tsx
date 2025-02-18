@@ -60,7 +60,7 @@ export const updateFeedback = async (idOfFeedback: number, idOfOrganization: num
 
 export const deleteFeedback = async (idOfFeedback: number) => {
     try {
-        const response = await fetch(DELETE_FEEDBACK_ABOUT_ORGANIZATION + `${idOfFeedback}`, {
+        const response = await fetch(DELETE_FEEDBACK_ABOUT_ORGANIZATION + `?idOfFeedback=${idOfFeedback}`, {
             method: "DELETE",
             headers: HEADERS,
         })

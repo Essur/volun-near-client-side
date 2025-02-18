@@ -8,6 +8,8 @@ import { Actions, FeedbackCard, FeedbackContainer, FeedbackDescription, Feedback
 import { FeedbackInfo } from "../types/Types";
 import NotificationModal from "./modal/NotificationModal";
 import StarRating from "./StarRating";
+import { ConfirmModal } from "../styles/GlobalStyledContainers";
+import ConfirmationModal from "./modal/ConfirmationModalWindow";
 
 interface FeedbackListProps {
     organizationId: number;
@@ -21,11 +23,12 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
     });
     const [feedbacks, setFeedbacks] = useState<FeedbackInfo[]>([]);
     const [averageRating, setAverageRating] = useState<number>(0);
+    const [isComfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const formattedRating = averageRating % 1 === 0 ? averageRating.toFixed(0) : averageRating.toFixed(1);
     const [editingFeedback, setEditingFeedback] = useState<number | null>(null);
     const [editedText, setEditedText] = useState("");
     const [editedRating, setEditedRating] = useState<number>(0);
+    const [feedbackId, setFeedbackId] = useState<number>(0);
     const { goTo } = useAppNavigation();
 
     useEffect(() => {
@@ -55,7 +58,6 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
         return (
             <StarRatingContainer>
                 {'★'.repeat(fullStars)}
-                {halfStar ? '½' : ''}
                 {'☆'.repeat(emptyStars)}
             </StarRatingContainer>
         );
@@ -104,6 +106,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
             title: response === 201 ? "Feedback was posted" : "Feedback was not posted",
             message: response === 201 ? "Feedback was successfully posted!" : "Error happened, try to re-login"
         })
+        goTo(0);
     };
 
     return (
@@ -140,7 +143,10 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
                                 {canEditOrDelete && feedback.username === localStorage.getItem("username") && (
                                     <Actions>
                                         <FaEdit onClick={() => handleEditClick(feedback)} />
-                                        <FaTrash onClick={() => handleDeleteFeedback(feedback.id)} />
+                                        <FaTrash onClick={() => {
+                                            setFeedbackId(feedback.id);
+                                            setIsConfirmOpen(true);
+                                        }} />
                                     </Actions>
                                 )}
                             </>
@@ -158,9 +164,20 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
                 message={notification.message}
                 onConfirm={() => {
                     setNotification({ isOpen: false, title: "", message: "" })
-                    goTo(0)
                 }}
             />
+
+            <ConfirmationModal
+                isOpen={isComfirmOpen}
+                message={"You really want to remove your feedback?"}
+                onConfirm={() => {
+                    handleDeleteFeedback(feedbackId);
+                    setIsConfirmOpen(false);
+                }}
+                onCancel={() => {
+                    setFeedbackId(0);
+                    setIsConfirmOpen(false);
+                }} />
         </>
     );
 };
