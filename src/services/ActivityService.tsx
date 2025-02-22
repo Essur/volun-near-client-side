@@ -1,4 +1,4 @@
-import { CREATE_ACTIVITY, DELETE_ACTIVITY, GET_ACTIVITY_INFO, GET_ALL_ACTIVITIES, GET_VOLUNTEERS_FROM_CURRENT_ACTIVITY, KICK_VOLUNTEER_FROM_ACTIVITY, UPDATE_ACTIVITY } from "../config/ApiRoutes";
+import { CREATE_ACTIVITY, DELETE_ACTIVITY, GET_ACTIVITY_INFO, GET_ALL_ACTIVITIES, GET_MY_ACTIVITIES_FOR_ORGANIZATION, GET_VOLUNTEERS_FROM_CURRENT_ACTIVITY, KICK_VOLUNTEER_FROM_ACTIVITY, UPDATE_ACTIVITY } from "../config/ApiRoutes";
 import { Activity, ActivityInfo, ActivityRequest, VolunteerInActivityInfo } from "../types/Types";
 
 const HEADERS = {
@@ -123,5 +123,24 @@ export const kickVolunteerFromActivity = async (username: string, activityId: nu
     } catch (err: any) {
         console.error(err);
         return null;
+    }
+}
+
+export const fetchMyActivitiesForOrganization = async (): Promise<Activity[]> => {
+    try {
+        const response = await fetch(GET_MY_ACTIVITIES_FOR_ORGANIZATION, {
+            method: "GET",
+            headers: HEADERS
+        })
+        if (response.ok) {
+            return response.json();
+        } else if (response.status === 404) {
+            throw new Error("There is no activities in your profile")
+        } else {
+            throw new Error("Failed to fetch your activities, try re-login");
+        }
+    } catch (err: any) {
+        console.error(err);
+        return [];
     }
 }

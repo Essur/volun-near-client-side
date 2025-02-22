@@ -6,10 +6,9 @@ import { useAppNavigation } from "../services/utils/AppNavigation";
 import { getRole } from "../services/utils/RoleService";
 import { Actions, FeedbackCard, FeedbackContainer, FeedbackDescription, FeedbackHeader, FeedbackInput, RatingContainer, StarRatingContainer, UserName } from "../styles/StyledFeedbacks";
 import { FeedbackInfo } from "../types/Types";
+import ConfirmationModal from "./modal/ConfirmationModalWindow";
 import NotificationModal from "./modal/NotificationModal";
 import StarRating from "./StarRating";
-import { ConfirmModal } from "../styles/GlobalStyledContainers";
-import ConfirmationModal from "./modal/ConfirmationModalWindow";
 
 interface FeedbackListProps {
     organizationId: number;
@@ -106,7 +105,6 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
             title: response === 201 ? "Feedback was posted" : "Feedback was not posted",
             message: response === 201 ? "Feedback was successfully posted!" : "Error happened, try to re-login"
         })
-        goTo(0);
     };
 
     return (
@@ -163,7 +161,8 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ organizationId }) => {
                 title={notification.title}
                 message={notification.message}
                 onConfirm={() => {
-                    setNotification({ isOpen: false, title: "", message: "" })
+                    setNotification({ isOpen: false, title: "", message: "" });
+                    goTo(0);
                 }}
             />
 

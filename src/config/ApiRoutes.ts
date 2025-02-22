@@ -24,6 +24,7 @@ export const GET_ACTIVITY_OF_CURRENT_ORGANIZATION = ORGANIZATION + "/get-activit
 export const GET_REQUESTS_FOR_ORGANIZATION = ORGANIZATION + "/my-requests";
 export const APPROVE_REQUEST = ORGANIZATION + "/approve-volunteer";
 export const KICK_VOLUNTEER_FROM_ACTIVITY = ORGANIZATION + "/kick-volunteer";
+export const GET_MY_ACTIVITIES_FOR_ORGANIZATION = ORGANIZATION + "/my-activities";
 
 /**
  * Volunteers routes
@@ -60,3 +61,12 @@ export const POST_FEEDBACK_ABOUT_ORGANIZATION = FEEDBACK + "/give-feedback";
 export const GET_FEEDBACKS_FROM_CURRENT_ORGANIZATION = FEEDBACK + "/feedbacks-of-organization";
 export const UPDATE_FEEDBACK_FOR_CURRENT_ORGANIZATION = FEEDBACK + "/update-feedback";
 export const DELETE_FEEDBACK_ABOUT_ORGANIZATION = FEEDBACK + "/remove-feedback";
+
+/**
+ * Notification subscription routes
+ */
+
+const NOTIFICATIONS = API_URL + "/notification";
+export const GET_NOTIFICATION_SUBSCRIPTION_STATUS = NOTIFICATIONS + "/status";
+export const SUBSCRIBE_TO_NOTIFICATIONS_BY_ID_OF_ORGANIZATION = NOTIFICATIONS + "/subscribe";
+export const UNSUBSCRIBE_FROM_NOTIFICATIONS_BY_ID_OF_ORGANIZATION = NOTIFICATIONS + "/unsubscribe";

@@ -17,6 +17,7 @@ import ActivityCreationForm from './pages/forms/ActivityCreationForm.tsx';
 import RequestsForOrganization from './pages/info/RequestsForOrganizationPage.tsx';
 import VolunteerRequestsPage from './pages/info/VolunteerRequestsPage.tsx';
 import VolunteersInCurrentActivityPage from './pages/info/VolunteersInCurrentActivityPage.tsx';
+import OrganizationActivitiesManagePage from './pages/profile/OrganizationActivitiesMangePage.tsx';
 
 const App: React.FC = () => {
     return (
@@ -31,6 +32,7 @@ const App: React.FC = () => {
                         <Route path="/create-activity" element={<ActivityCreationForm/>}/>
                         <Route path="/organizations" element={<AllOrganizationsPage/>}/>
                         <Route path="/organization/:id" element={<OrganizationInfoPage/>}/>
+                        <Route path="/organization/my-activities" element={<OrganizationActivitiesManagePage/>}/>
                         <Route path="/activity/managment/:id" element={<VolunteersInCurrentActivityPage/>}/>
                         <Route path="/organization-requests" element={<RequestsForOrganization/>}/>
                         <Route path="/volunteer-requests" element={<VolunteerRequestsPage/>}/>

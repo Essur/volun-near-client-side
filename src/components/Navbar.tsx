@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
                                     My requests
                                 </MenuItem>
                                 {sRole === "organization" && (
-                                    <MenuItem>
+                                    <MenuItem onClick={() => goTo("/organization/my-activities")}>
                                         My activities
                                     </MenuItem>
                                 )}
