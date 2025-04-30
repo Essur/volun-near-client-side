@@ -70,7 +70,7 @@ const OrganizationInfoPage: React.FC = () => {
         <>
             <MainContentContainer>
                 <Title>{organization.organizationResponseDTO.nameOfOrganization}</Title>
-                <NotificationBell isSubscribed={subscriptionStatus} onToggle={handleClick} />
+                {getRole() === "volunteer" && <NotificationBell isSubscribed={subscriptionStatus} onToggle={handleClick} />}
                 <Details>
                     <StyledText><Strong>Country:</Strong> {organization.organizationResponseDTO.country}</StyledText>
                     <StyledText><Strong>City:</Strong> {organization.organizationResponseDTO.city}</StyledText>
