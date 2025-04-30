@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useTheme } from "../contexts/ThemeContext";
 import { useAppNavigation } from "../services/utils/AppNavigation";
 import { getRole } from "../services/utils/RoleService";
 import {
@@ -10,21 +9,20 @@ import {
   SignInLink,
   SignUpLink,
   StyledLink,
-  ThemeButton,
   Title,
-  Username,
+  Username
 } from "../styles/GlobalStyledComponents";
 import {
   LinksContainer,
   NavbarContainer,
 } from "../styles/GlobalStyledContainers";
+import ThemeToggle from "./ui/custom/ThemeToggle";
 
 const Navbar: React.FC = () => {
   const { isLoggedIn, username, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const sRole = getRole();
   const { goTo } = useAppNavigation();
+  const sRole = getRole();
 
   const handleLogout = () => {
     logout();
@@ -94,10 +92,9 @@ const Navbar: React.FC = () => {
             <SignUpLink to="/register">Sign Up</SignUpLink>
           </>
         )}
-        <ThemeButton onClick={toggleTheme}>
-          {theme === "light" ? "🌙 Dark" : "☀️ Light"}
-        </ThemeButton>
+        <ThemeToggle />
       </LinksContainer>
+
     </NavbarContainer>
   );
 };
