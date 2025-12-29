@@ -6,7 +6,7 @@ const ORGANIZATION = API_URL + "/organization";
 /**
  * Users management
  */
-export const LOGIN = API_URL + "/login";
+export const LOGIN = API_URL + "/auth/login";
 export const REFRESH_TOKEN = API_URL + "/refresh-token"
 export const REGISTER_ROUTE_SECURITY = API_URL + "/registration";
 export const REGISTER_VOLUNTEER = API_URL + "/registration/volunteer";
