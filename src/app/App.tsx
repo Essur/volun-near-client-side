@@ -10,8 +10,8 @@ import { LoginPage } from "@/pages/auth/login/LoginPage";
 import { AuthLayout } from "./layouts/AuthLayout";
 
 const authRoutes = [
-  { path: "/auth/registration", element: <RegistrationPage /> },
-  { path: "/auth/login", element: <LoginPage /> },
+  { path: "/registration", element: <RegistrationPage /> },
+  { path: "/login", element: <LoginPage /> },
 ]
 
 const publicRoutes = [
@@ -33,9 +33,9 @@ export const App = () => {
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
         </Route>
-        <Route element={<AuthLayout/>}>
+        <Route element={<AuthLayout />}>
           {authRoutes.map((route) => (
-            <Route key={route.path} path={route.path} element={route.element} />
+            <Route key={route.path} path={"/auth" + route.path} element={route.element} />
           ))}
         </Route>
         <Route path="*" element={<div>Page Not Found</div>} />

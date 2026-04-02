@@ -8,6 +8,7 @@ import { Input } from "@/shared/ui/input"
 import { Button } from "@/shared/ui/button"
 import { DatePicker } from "@/shared/ui/date-picker"
 import { VolunteerFormValues, volunteerSchema } from "../../model/register-schemas"
+import { handleApiError } from "@/shared/api/error-handler"
 
 export const VolunteerForm = () => {
   const form = useForm<VolunteerFormValues>({
@@ -29,13 +30,7 @@ export const VolunteerForm = () => {
       toast.success("Volunteer registered!");
     } catch (error: any) {
       console.log(error);
-      if (error.response?.status === 409) {
-        toast.error("Registration failed!", {
-          description: error.response.data.message,
-        })
-      } else {
-        toast.error("Unexpected error!");
-      }
+      handleApiError(error);
     }
   };
 

@@ -6,8 +6,11 @@ import { toast } from "sonner";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
+import { useNavigate } from "react-router-dom";
+import { handleApiError } from "@/shared/api/error-handler";
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -17,31 +20,35 @@ export const LoginForm = () => {
   })
 
   const onSubmit = async (data: LoginFormValues) => {
-      try {
-        await authService.login(data);
-        toast.success("Successfully logined")
-      } catch (error) {
-        
-      }
+    try {
+      await authService.login(data);
+      toast.success("Welcome back!", {
+        description: "You have successfully logged in.",
+      });
+      navigate("/")
+    } catch (error) {
+      console.log(error);
+      handleApiError(error);
+    }
   }
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-          <FormField control={form.control} name="username" render={({field}) => (
+          <FormField control={form.control} name="username" render={({ field }) => (
             <FormItem>
               <FormLabel>Username or email</FormLabel>
               <FormControl><Input {...field} /></FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
-          )}/>
-          <FormField control={form.control} name="password" render={({field}) => (
+          )} />
+          <FormField control={form.control} name="password" render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl><Input {...field} type="password" /></FormControl>
-              <FormMessage/>
+              <FormMessage />
             </FormItem>
-          )}/>
+          )} />
           <Button type="submit" className="w-full mt-6">Login</Button>
         </form>
       </Form>
