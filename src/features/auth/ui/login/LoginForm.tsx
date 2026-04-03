@@ -8,8 +8,10 @@ import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { useNavigate } from "react-router-dom";
 import { handleApiError } from "@/shared/api/error-handler";
+import { useAuth } from "@/app/providers/auth/useAuth";
 
 export const LoginForm = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -22,6 +24,8 @@ export const LoginForm = () => {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await authService.login(data);
+      const appUser = await authService.fetchUser();
+      login(appUser);
       toast.success("Welcome back!", {
         description: "You have successfully logged in.",
       });
@@ -31,6 +35,7 @@ export const LoginForm = () => {
       handleApiError(error);
     }
   }
+
   return (
     <>
       <Form {...form}>

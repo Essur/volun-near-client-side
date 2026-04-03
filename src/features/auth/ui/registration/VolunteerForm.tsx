@@ -1,14 +1,13 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from "sonner"
-import { authService } from "../../api/auth-api"
-import { BaseAuthFields } from "./BaseAuthFields"
+import { handleApiError } from "@/shared/api/error-handler"
+import { Button } from "@/shared/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { Input } from "@/shared/ui/input"
-import { Button } from "@/shared/ui/button"
-import { DatePicker } from "@/shared/ui/date-picker"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { authService } from "../../api/auth-api"
 import { VolunteerFormValues, volunteerSchema } from "../../model/register-schemas"
-import { handleApiError } from "@/shared/api/error-handler"
+import { BaseAuthFields } from "./BaseAuthFields"
 
 export const VolunteerForm = () => {
   const form = useForm<VolunteerFormValues>({
