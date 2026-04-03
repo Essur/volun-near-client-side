@@ -4,10 +4,12 @@ import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import { MainLayout } from "./layouts/MainLayout";
-import { setupApiInterceptors } from "./providers/with-api";
+import { setupApiInterceptors } from "./providers/api/with-api";
 import { RegistrationPage } from "@/pages/auth/registration/RegistrationPage";
 import { LoginPage } from "@/pages/auth/login/LoginPage";
 import { AuthLayout } from "./layouts/AuthLayout";
+import { useAuth } from "./providers/auth/useAuth";
+import { Spinner } from "@/shared/ui/spinner";
 
 const authRoutes = [
   { path: "/registration", element: <RegistrationPage /> },
@@ -19,12 +21,21 @@ const publicRoutes = [
 ]
 
 export const App = () => {
+  const {isLoading} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     setupApiInterceptors(navigate);
   }, [navigate]);
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner className="size-4"/>
+      </div>
+    )
+  }
+ 
   return (
     <>
       <Routes>
